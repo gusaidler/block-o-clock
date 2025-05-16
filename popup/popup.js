@@ -39,8 +39,9 @@ document.addEventListener('DOMContentLoaded', () => {
     Sat: document.getElementById('daySat'),
     Sun: document.getElementById('daySun'),
   };
-  const startTimeInput = document.getElementById('startTime');
-  const endTimeInput = document.getElementById('endTime');
+  const timeIntervalsList = document.getElementById('timeIntervalsList');
+  const addIntervalBtn = document.getElementById('addIntervalBtn');
+
   const scheduleRedirectUrlInput = document.getElementById('scheduleRedirectUrl');
   const newScheduleSiteInput = document.getElementById('newScheduleSite');
   const addScheduleSiteBtn = document.getElementById('addScheduleSiteBtn');
@@ -148,6 +149,7 @@ document.addEventListener('DOMContentLoaded', () => {
     editingScheduleIndexInput.value = index;
     currentScheduleSites = [];
     currentScheduleKeywords = [];
+    timeIntervalsList.innerHTML = ''; // Clear existing intervals
 
     if (schedule) {
       scheduleFormTitle.textContent = 'Edit';
@@ -157,8 +159,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const dayCheckbox = Object.values(dayCheckboxes).find(cb => parseInt(cb.value) === dayVal);
         if(dayCheckbox) dayCheckbox.checked = true;
       });
-      startTimeInput.value = schedule.startTime;
-      endTimeInput.value = schedule.endTime;
+      if (schedule.timeIntervals && schedule.timeIntervals.length > 0) {
+        schedule.timeIntervals.forEach(interval => {
+          addIntervalToDOM(interval.startTime, interval.endTime);
+        });
+      } else {
+        // Fallback for old data structure or ensure at least one interval
+        addIntervalToDOM('09:00', '17:00');
+      }
       scheduleRedirectUrlInput.value = schedule.redirectUrl || '';
       currentScheduleSites = [...(schedule.sites || [])];
       currentScheduleKeywords = [...(schedule.keywords || [])];
@@ -166,8 +174,7 @@ document.addEventListener('DOMContentLoaded', () => {
       scheduleFormTitle.textContent = 'Add New';
       scheduleNameInput.value = '';
       Object.values(dayCheckboxes).forEach(cb => cb.checked = false);
-      startTimeInput.value = '09:00';
-      endTimeInput.value = '17:00';
+      addIntervalToDOM('09:00', '17:00'); // Add one default interval
       scheduleRedirectUrlInput.value = '';
     }
     renderScheduleSpecificItems();
@@ -180,12 +187,31 @@ document.addEventListener('DOMContentLoaded', () => {
     // Clear form fields
     scheduleNameInput.value = '';
     Object.values(dayCheckboxes).forEach(cb => cb.checked = false);
-    startTimeInput.value = '';
-    endTimeInput.value = '';
+    timeIntervalsList.innerHTML = ''; // Clear intervals
     scheduleRedirectUrlInput.value = '';
     currentScheduleSites = [];
     currentScheduleKeywords = [];
     renderScheduleSpecificItems(); 
+  }
+
+  function addIntervalToDOM(startTime = '09:00', endTime = '17:00') {
+    const intervalPairDiv = document.createElement('div');
+    intervalPairDiv.classList.add('time-interval-pair');
+    intervalPairDiv.innerHTML = `
+      <input type="time" class="startTimeInput" value="${startTime}">
+      <span>-</span>
+      <input type="time" class="endTimeInput" value="${endTime}">
+      <button type="button" class="removeIntervalBtn">Remove</button>
+    `;
+    timeIntervalsList.appendChild(intervalPairDiv);
+    intervalPairDiv.querySelector('.removeIntervalBtn').addEventListener('click', () => {
+        // Ensure at least one interval remains
+        if (timeIntervalsList.querySelectorAll('.time-interval-pair').length > 1) {
+            intervalPairDiv.remove();
+        } else {
+            alert('A schedule must have at least one time interval.');
+        }
+    });
   }
 
   function renderScheduleSpecificItems() {
@@ -227,12 +253,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
   saveScheduleBtn.addEventListener('click', () => {
     const name = scheduleNameInput.value.trim();
-    const startTime = startTimeInput.value;
-    const endTime = endTimeInput.value;
     const scheduleRedirect = scheduleRedirectUrlInput.value.trim();
 
-    if (!name || !startTime || !endTime) {
-      alert('Please fill in schedule name, start time, and end time.');
+    const timeIntervals = [];
+    const intervalPairs = timeIntervalsList.querySelectorAll('.time-interval-pair');
+    intervalPairs.forEach(pair => {
+      const startInput = pair.querySelector('.startTimeInput');
+      const endInput = pair.querySelector('.endTimeInput');
+      if (startInput.value && endInput.value) {
+        if (startInput.value >= endInput.value) {
+            alert(`Error: Start time (${startInput.value}) must be before end time (${endInput.value}) in an interval.`);
+            return; // Stop execution if an interval is invalid
+        }
+        timeIntervals.push({ startTime: startInput.value, endTime: endInput.value });
+      }
+    });
+
+    if (timeIntervals.length === 0) {
+        alert('Please add at least one valid time interval.');
+        return;
+    }
+
+    if (!name) {
+      alert('Please fill in schedule name.');
       return;
     }
 
@@ -251,8 +294,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const newSchedule = {
       name,
       days: selectedDays,
-      startTime,
-      endTime,
+      timeIntervals: timeIntervals,
       sites: [...currentScheduleSites],
       keywords: [...currentScheduleKeywords],
       redirectUrl: scheduleRedirect || '' // Empty string means use global
@@ -274,10 +316,18 @@ document.addEventListener('DOMContentLoaded', () => {
     schedules.forEach((schedule, index) => {
       const div = document.createElement('div');
       div.classList.add('schedule-item');
+      
+      let intervalsString = 'No time intervals set.';
+      if (schedule.timeIntervals && schedule.timeIntervals.length > 0) {
+        intervalsString = schedule.timeIntervals.map(interval => `${interval.startTime} - ${interval.endTime}`).join(', ');
+      } else if (schedule.startTime && schedule.endTime) { // Fallback for old structure
+        intervalsString = `${schedule.startTime} - ${schedule.endTime}`;
+      }
+
       div.innerHTML = `
-        <strong>${schedule.name}</strong> (${schedule.startTime} - ${schedule.endTime})<br>
+        <strong>${schedule.name}</strong> (${intervalsString})<br>
         Days: ${schedule.days.map(d => Object.keys(dayCheckboxes)[Object.values(dayCheckboxes).findIndex(cb => parseInt(cb.value) === d)] || 'N/A').join(', ')}<br>
-        Sites: ${schedule.sites.length}, Keywords: ${schedule.keywords.length}<br>
+        Sites: ${schedule.sites ? schedule.sites.length : 0}, Keywords: ${schedule.keywords ? schedule.keywords.length : 0}<br>
         Redirect: ${schedule.redirectUrl || 'Global'}
       `;
       const editButton = document.createElement('button');
@@ -297,6 +347,8 @@ document.addEventListener('DOMContentLoaded', () => {
       scheduleListDiv.appendChild(div);
     });
   }
+
+  addIntervalBtn.addEventListener('click', () => addIntervalToDOM());
 
   // Initial load
   loadSettings();

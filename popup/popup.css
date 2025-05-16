@@ -339,4 +339,51 @@ button.full-width {
   justify-content: flex-end;
   gap: 10px;
   margin-top: 20px;
-} 
+}
+
+/* Styles for time intervals */
+.time-inputs-container label {
+  /* Use existing label styling or add specific if needed */
+  margin-bottom: 10px; /* Add some space below the label */
+}
+
+#timeIntervalsList .time-interval-pair {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  gap: 8px; /* Space between inputs and button */
+}
+
+#timeIntervalsList .time-interval-pair input[type="time"] {
+  flex-grow: 1;
+  /* Inherits styling from general input[type="time"] */
+}
+
+#timeIntervalsList .time-interval-pair span {
+  color: var(--secondary-text);
+}
+
+#timeIntervalsList .time-interval-pair .removeIntervalBtn {
+  background-color: transparent;
+  color: var(--danger-color);
+  border: 1px solid var(--danger-color);
+  padding: 6px 10px;
+  font-size: 12px;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+#timeIntervalsList .time-interval-pair .removeIntervalBtn:hover {
+  background-color: var(--danger-color);
+  color: var(--primary-bg);
+}
+
+#addIntervalBtn {
+  display: block; /* Make it full width or align as needed */
+  margin-top: 10px;
+  width: 100%; /* Example: make it full width like other primary buttons */
+  text-align: center;
+}
+
+/* End of Styles for time intervals */ 

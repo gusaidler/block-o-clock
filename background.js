@@ -68,7 +68,21 @@ function isCurrentlyBlocked(url) {
   // Check schedules
   for (const schedule of schedules) {
     const isInDay = schedule.days.includes(currentDay);
-    const isInTime = currentTime >= schedule.startTime && currentTime < schedule.endTime;
+
+    let isInTime = false;
+    if (schedule.timeIntervals && schedule.timeIntervals.length > 0) {
+      for (const interval of schedule.timeIntervals) {
+        if (currentTime >= interval.startTime && currentTime < interval.endTime) {
+          isInTime = true;
+          break;
+        }
+      }
+    } else if (schedule.startTime && schedule.endTime) {
+      // Fallback for old data structure if timeIntervals is missing
+      if (currentTime >= schedule.startTime && currentTime < schedule.endTime) {
+        isInTime = true;
+      }
+    }
 
     if (isInDay && isInTime) {
       // This schedule is active, check its sites and keywords

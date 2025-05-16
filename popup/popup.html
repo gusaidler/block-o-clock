@@ -59,15 +59,18 @@
             <input type="checkbox" id="daySun" value="0"><label for="daySun">S</label>
           </div>
 
-          <div class="time-inputs">
-            <div>
-              <label for="startTime">Start Time:</label>
-              <input type="time" id="startTime">
+          <div class="time-inputs-container">
+            <label>Time Intervals:</label>
+            <div id="timeIntervalsList">
+              <!-- Time interval pairs will be added here by JS -->
+              <div class="time-interval-pair">
+                <input type="time" class="startTimeInput" value="09:00">
+                <span>-</span>
+                <input type="time" class="endTimeInput" value="17:00">
+                <button type="button" class="removeIntervalBtn">Remove</button>
+              </div>
             </div>
-            <div>
-              <label for="endTime">End Time:</label>
-              <input type="time" id="endTime">
-            </div>
+            <button type="button" id="addIntervalBtn" class="secondary-action">Add Time Interval</button>
           </div>
 
           <label for="scheduleRedirectUrl">Redirect to (optional):</label>
