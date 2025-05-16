@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Block-O-Clock</title>
+  <link rel="stylesheet" type="text/css" href="popup.css">
+  <!-- Using a common modern font from Google Fonts for a quick upgrade -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <header class="app-header">
+      <h1>Block-O-Clock</h1>
+      <!-- Simple tab navigation -->
+      <nav class="tab-nav">
+        <button class="tab-link active" data-tab="general">General</button>
+        <button class="tab-link" data-tab="schedules">Schedules</button>
+        <button class="tab-link" data-tab="settings">Settings</button>
+      </nav>
+    </header>
+
+    <main>
+      <!-- General Blocking Rules Tab -->
+      <div id="general" class="tab-content active">
+        <h2>Always-On Blocking</h2>
+        <p>Rules here apply all the time, regardless of schedules.</p>
+        <div class="input-group">
+          <input type="text" id="newBlockedSite" placeholder="Add URL (e.g., example.com)">
+          <button id="addBlockedSite" class="primary-action">Add URL</button>
+        </div>
+        <div class="input-group">
+          <input type="text" id="newBlockedKeyword" placeholder="Add Keyword (e.g., news)">
+          <button id="addBlockedKeyword" class="primary-action">Add Keyword</button>
+        </div>
+        <ul id="blockedItemsList" class="items-list"></ul>
+      </div>
+
+      <!-- Schedules Tab -->
+      <div id="schedules" class="tab-content">
+        <h2>Scheduled Blocking</h2>
+        <p>Create time-based rules for blocking specific sites or keywords.</p>
+        <div id="scheduleList" class="schedule-items-container"></div>
+        <button id="addScheduleBtn" class="primary-action full-width">Create New Schedule</button>
+
+        <div id="scheduleFormContainer" class="modal-form" style="display:none;">
+          <h3 id="scheduleFormTitle">Add New Schedule</h3>
+          <input type="hidden" id="editingScheduleIndex" value="-1">
+          
+          <label for="scheduleName">Schedule Name:</label>
+          <input type="text" id="scheduleName" placeholder="e.g., Focus Hours">
+
+          <label>Active Days:</label>
+          <div class="days-selector">
+            <input type="checkbox" id="dayMon" value="1"><label for="dayMon">M</label>
+            <input type="checkbox" id="dayTue" value="2"><label for="dayTue">T</label>
+            <input type="checkbox" id="dayWed" value="3"><label for="dayWed">W</label>
+            <input type="checkbox" id="dayThu" value="4"><label for="dayThu">T</label>
+            <input type="checkbox" id="dayFri" value="5"><label for="dayFri">F</label>
+            <input type="checkbox" id="daySat" value="6"><label for="daySat">S</label>
+            <input type="checkbox" id="daySun" value="0"><label for="daySun">S</label>
+          </div>
+
+          <div class="time-inputs">
+            <div>
+              <label for="startTime">Start Time:</label>
+              <input type="time" id="startTime">
+            </div>
+            <div>
+              <label for="endTime">End Time:</label>
+              <input type="time" id="endTime">
+            </div>
+          </div>
+
+          <label for="scheduleRedirectUrl">Redirect to (optional):</label>
+          <input type="text" id="scheduleRedirectUrl" placeholder="Default: pages/blocked.html">
+          
+          <h4>Blocked Content for this Schedule:</h4>
+          <div class="input-group">
+            <input type="text" id="newScheduleSite" placeholder="Add URL for this schedule">
+            <button id="addScheduleSiteBtn">Add URL</button>
+          </div>
+          <div class="input-group">
+            <input type="text" id="newScheduleKeyword" placeholder="Add Keyword for this schedule">
+            <button id="addScheduleKeywordBtn">Add Keyword</button>
+          </div>
+          <ul id="scheduleSpecificItemsList" class="items-list small-list"></ul>
+          
+          <div class="form-actions">
+            <button id="saveScheduleBtn" class="primary-action">Save Schedule</button>
+            <button id="cancelScheduleBtn" class="secondary-action">Cancel</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Settings/Global Redirect Tab -->
+      <div id="settings" class="tab-content">
+        <h2>Global Settings</h2>
+        <p>This redirect URL is used if a blocked site doesn't have a schedule-specific redirect.</p>
+        <label for="globalRedirectUrlInput">Global Redirect URL:</label>
+        <div class="input-group">
+          <input type="text" id="globalRedirectUrlInput" placeholder="e.g., pages/blocked.html">
+          <button id="setGlobalRedirectBtn" class="primary-action">Set Global Redirect</button>
+        </div>
+      </div>
+    </main>
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html> 

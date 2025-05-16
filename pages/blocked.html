@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Focus & Redirect</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      background-color: #f4f7f6; /* Light, calm background */
+      color: #333;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    .container {
+      text-align: center;
+      background-color: #ffffff;
+      padding: 30px 40px;
+      border-radius: 12px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+      max-width: 600px;
+      width: 100%;
+    }
+    h1 {
+      color: #2c3e50; /* Calmer, professional blue */
+      font-size: 28px;
+      margin-bottom: 15px;
+      font-weight: 600;
+    }
+    p {
+      color: #555;
+      font-size: 16px;
+      line-height: 1.7;
+      margin-bottom: 25px;
+    }
+    .action-prompt {
+        font-weight: 500;
+        color: #3498db; /* Encouraging blue */
+    }
+    .section {
+      margin-top: 30px;
+      text-align: left;
+    }
+    .section h2 {
+      color: #3498db; /* Accent blue */
+      font-size: 20px;
+      margin-bottom: 15px;
+      border-bottom: 1px solid #e0e0e0;
+      padding-bottom: 8px;
+      font-weight: 500;
+    }
+    .section ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    .section ul li {
+      background-color: #f9f9f9;
+      padding: 12px 15px;
+      margin-bottom: 10px;
+      border-radius: 8px;
+      border-left: 4px solid #3498db;
+      font-size: 15px;
+      color: #444;
+      transition: transform 0.2s ease;
+    }
+    .section ul li:hover {
+        transform: translateX(5px);
+    }
+    .resources a {
+        color: #2980b9;
+        text-decoration: none;
+        font-weight: 500;
+    }
+    .resources a:hover {
+        text-decoration: underline;
+    }
+    .footer-note {
+        margin-top: 30px;
+        font-size: 13px;
+        color: #777;
+    }
+    .back-button {
+        display: inline-block;
+        margin-top: 20px;
+        padding: 10px 20px;
+        background-color: #3498db;
+        color: white;
+        text-decoration: none;
+        border-radius: 6px;
+        font-weight: 500;
+        transition: background-color 0.3s ease;
+    }
+    .back-button:hover {
+        background-color: #2980b9;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Let's Get Back to Focus!</h1>
+    <p>It looks like you were about to visit a site that might interrupt your flow. No worries, it happens!</p>
+    <p class="action-prompt">Here are a few ideas to help you refocus and make the most of your time:</p>
+
+    <div class="section hints">
+      <h2>Quick Tips for Refocusing:</h2>
+      <ul>
+        <li><strong>Take a Short Break:</strong> Stand up, stretch, or grab a glass of water.</li>
+        <li><strong>Review Your Goals:</strong> Briefly look at your to-do list for today.</li>
+        <li><strong>The Pomodoro Technique:</strong> Work in focused 25-minute intervals.</li>
+        <li><strong>Minimize Distractions:</strong> Close other unnecessary tabs or apps.</li>
+        <li><strong>One Task at a Time:</strong> Concentrate on completing a single task before moving on.</li>
+      </ul>
+    </div>
+
+    <div class="section resources">
+      <h2>Helpful Resources:</h2>
+      <ul>
+        <li><a href="https://www.forbes.com/advisor/business/productivity-tips/" target="_blank">Productivity Tips (Forbes)</a></li>
+        <li><a href="https://todoist.com/productivity-methods/pomodoro-technique" target="_blank">Learn about the Pomodoro Technique</a></li>
+        <li><a href="https://www.coursera.org/" target="_blank">Coursera (Online Courses)</a></li>
+        <li><a href="https://www.edx.org/" target="_blank">edX (Online Courses)</a></li>
+        <li><a href="https://www.calm.com/" target="_blank">Calm (Meditation & Sleep)</a></li>
+      </ul>
+    </div>
+
+    <a href="#" onclick="window.history.back(); return false;" class="back-button">Go Back (or try a productive link above!)</a>
+
+    <p class="footer-note">
+      Remember, you can always adjust your Block-O-Clock settings via the extension icon.
+    </p>
+  </div>
+</body>
+</html> 

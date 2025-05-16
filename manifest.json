@@ -1,0 +1,34 @@
+{
+  "manifest_version": 3,
+  "name": "Block-O-Clock",
+  "version": "1.0",
+  "description": "Block specific websites and URL keywords based on a schedule with Block-O-Clock.",
+  "permissions": [
+    "storage",
+    "webNavigation",
+    "tabs",
+    "scripting"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_icon": {
+      "16": "images/icon16.png",
+      "48": "images/icon48.png",
+      "128": "images/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "images/icon16.png",
+    "48": "images/icon48.png",
+    "128": "images/icon128.png"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["pages/blocked.html"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+} 
