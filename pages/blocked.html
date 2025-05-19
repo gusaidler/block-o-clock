@@ -105,13 +105,13 @@
 </head>
 <body>
   <div class="container">
-    <h1>Let's Get Back to Focus!</h1>
-    <p>It looks like you were about to visit a site that might interrupt your flow. No worries, it happens!</p>
-    <p class="action-prompt">Here are a few ideas to help you refocus and make the most of your time:</p>
+    <img src="" alt="Funny redirection image" id="funnyImage" style="max-width: 100%; height: auto; margin-left: auto; margin-right: auto; margin-bottom: 20px; border-radius: 8px; display: none;">
+    <h1 id="mainHeadline">Let's Get Back to Focus!</h1>
+    <p id="introMessage">It looks like you were about to visit a site that might interrupt your flow. No worries, it happens!</p>
 
     <div class="section hints">
-      <h2>Quick Tips for Refocusing:</h2>
-      <ul>
+    <h2 class="action-prompt" id="actionPrompt">Here are a few ideas to help you refocus and make the most of your time:</h2>
+      <ul id="refocusTipsList">
         <li><strong>Take a Short Break:</strong> Stand up, stretch, or grab a glass of water.</li>
         <li><strong>Review Your Goals:</strong> Briefly look at your to-do list for today.</li>
         <li><strong>The Pomodoro Technique:</strong> Work in focused 25-minute intervals.</li>
@@ -120,22 +120,10 @@
       </ul>
     </div>
 
-    <div class="section resources">
-      <h2>Helpful Resources:</h2>
-      <ul>
-        <li><a href="https://www.forbes.com/advisor/business/productivity-tips/" target="_blank">Productivity Tips (Forbes)</a></li>
-        <li><a href="https://todoist.com/productivity-methods/pomodoro-technique" target="_blank">Learn about the Pomodoro Technique</a></li>
-        <li><a href="https://www.coursera.org/" target="_blank">Coursera (Online Courses)</a></li>
-        <li><a href="https://www.edx.org/" target="_blank">edX (Online Courses)</a></li>
-        <li><a href="https://www.calm.com/" target="_blank">Calm (Meditation & Sleep)</a></li>
-      </ul>
-    </div>
-
-    <a href="#" onclick="window.history.back(); return false;" class="back-button">Go Back (or try a productive link above!)</a>
-
     <p class="footer-note">
       Remember, you can always adjust your Block-O-Clock settings via the extension icon.
     </p>
   </div>
+  <script src="blocked.js"></script>
 </body>
 </html> 
