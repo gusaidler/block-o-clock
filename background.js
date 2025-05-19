@@ -53,12 +53,34 @@ function isCurrentlyBlocked(url) {
   let siteIsBlocked = false;
   let effectiveRedirectUrl = globalRedirectUrl;
 
+  // Helper function to check if a URL matches a blocked pattern
+  const matchesPattern = (urlToCheck, pattern) => {
+    try {
+      // Attempt to parse the URL to extract the hostname
+      const parsedUrl = new URL(urlToCheck);
+      const hostname = parsedUrl.hostname;
+      // Construct a regex to match the pattern as a whole domain or subdomain
+      // e.g., "x.com" should match "x.com", "www.x.com", but not "electrolux.com"
+      // It should also match "x.com/path"
+      // The pattern should be escaped for any special regex characters
+      const escapedPattern = pattern.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const regex = new RegExp(`^(www\\.)?${escapedPattern}(\\/|$)`, 'i');
+      return regex.test(hostname);
+    } catch (e) {
+      // If URL parsing fails, fall back to simple includes for keywords
+      // or for patterns not clearly identifiable as hostnames (e.g. if user enters "news" as a URL type)
+      // This maintains some backward compatibility if the pattern isn't a valid domain part.
+      return urlToCheck.toLowerCase().includes(pattern.toLowerCase());
+    }
+  };
+  
   // Check general blocked sites (not tied to a schedule)
   for (const site of blockedSites) {
-    if (site.type === 'url' && url.includes(site.value)) {
+    if (site.type === 'url' && matchesPattern(url, site.value)) {
       siteIsBlocked = true;
       break;
     }
+    // Keyword matching remains as .includes, as keywords are expected to be substrings
     if (site.type === 'keyword' && url.toLowerCase().includes(site.value.toLowerCase())) {
       siteIsBlocked = true;
       break;
@@ -87,7 +109,7 @@ function isCurrentlyBlocked(url) {
     if (isInDay && isInTime) {
       // This schedule is active, check its sites and keywords
       for (const blocked of schedule.sites) { // Assuming schedule.sites is an array of strings (URLs)
-        if (url.includes(blocked)) {
+        if (matchesPattern(url, blocked)) {
           siteIsBlocked = true;
           effectiveRedirectUrl = schedule.redirectUrl || globalRedirectUrl;
           break;
@@ -96,6 +118,7 @@ function isCurrentlyBlocked(url) {
       if (siteIsBlocked) break; // Found a block in this active schedule
 
       for (const keyword of schedule.keywords) { // Assuming schedule.keywords is an array of strings
+        // Keyword matching remains as .includes
         if (url.toLowerCase().includes(keyword.toLowerCase())) {
           siteIsBlocked = true;
           effectiveRedirectUrl = schedule.redirectUrl || globalRedirectUrl;
