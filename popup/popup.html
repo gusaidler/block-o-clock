@@ -38,6 +38,13 @@
       <div id="schedules" class="tab-content">
         <h2>Scheduled Blocking</h2>
         <p>Create time-based rules for blocking specific sites or keywords.</p>
+        
+        <!-- Active Break Controls -->
+        <div id="breakControlsContainer" class="break-controls-container" style="display: none;">
+          <h3>Active Break</h3>
+          <div id="breakControlsContent"></div>
+        </div>
+
         <div id="scheduleList" class="schedule-items-container"></div>
         <button id="addScheduleBtn" class="primary-action full-width">Create New Schedule</button>
 
@@ -71,6 +78,12 @@
               </div>
             </div>
             <button type="button" id="addIntervalBtn" class="secondary-action">Add Time Interval</button>
+          </div>
+
+          <label for="breakDuration">Break Duration (minutes):</label>
+          <div class="input-group">
+            <input type="number" id="breakDuration" min="0" max="120" value="0" placeholder="0 = no break">
+            <span class="input-hint">0 = no break allowed</span>
           </div>
 
           <label for="scheduleRedirectUrl">Redirect to (optional):</label>

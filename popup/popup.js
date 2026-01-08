@@ -43,6 +43,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const addIntervalBtn = document.getElementById('addIntervalBtn');
 
   const scheduleRedirectUrlInput = document.getElementById('scheduleRedirectUrl');
+  const breakDurationInput = document.getElementById('breakDuration');
+  const breakControlsContainer = document.getElementById('breakControlsContainer');
+  const breakControlsContent = document.getElementById('breakControlsContent');
   const newScheduleSiteInput = document.getElementById('newScheduleSite');
   const addScheduleSiteBtn = document.getElementById('addScheduleSiteBtn');
   const newScheduleKeywordInput = document.getElementById('newScheduleKeyword');
@@ -87,6 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
       globalRedirectUrlInput.value = globalRedirectUrl;
       renderBlockedItems();
       renderSchedules();
+      updateBreakControls();
     });
   }
 
@@ -168,6 +172,7 @@ document.addEventListener('DOMContentLoaded', () => {
         addIntervalToDOM('09:00', '17:00');
       }
       scheduleRedirectUrlInput.value = schedule.redirectUrl || '';
+      breakDurationInput.value = schedule.breakDuration || 0;
       currentScheduleSites = [...(schedule.sites || [])];
       currentScheduleKeywords = [...(schedule.keywords || [])];
     } else {
@@ -176,6 +181,7 @@ document.addEventListener('DOMContentLoaded', () => {
       Object.values(dayCheckboxes).forEach(cb => cb.checked = false);
       addIntervalToDOM('09:00', '17:00'); // Add one default interval
       scheduleRedirectUrlInput.value = '';
+      breakDurationInput.value = 0;
     }
     renderScheduleSpecificItems();
   }
@@ -189,6 +195,7 @@ document.addEventListener('DOMContentLoaded', () => {
     Object.values(dayCheckboxes).forEach(cb => cb.checked = false);
     timeIntervalsList.innerHTML = ''; // Clear intervals
     scheduleRedirectUrlInput.value = '';
+    breakDurationInput.value = 0;
     currentScheduleSites = [];
     currentScheduleKeywords = [];
     renderScheduleSpecificItems(); 
@@ -297,7 +304,8 @@ document.addEventListener('DOMContentLoaded', () => {
       timeIntervals: timeIntervals,
       sites: [...currentScheduleSites],
       keywords: [...currentScheduleKeywords],
-      redirectUrl: scheduleRedirect || '' // Empty string means use global
+      redirectUrl: scheduleRedirect || '', // Empty string means use global
+      breakDuration: parseInt(breakDurationInput.value) || 0
     };
 
     const editIndex = parseInt(editingScheduleIndexInput.value);
@@ -324,11 +332,13 @@ document.addEventListener('DOMContentLoaded', () => {
         intervalsString = `${schedule.startTime} - ${schedule.endTime}`;
       }
 
+      const breakInfo = schedule.breakDuration ? `Break: ${schedule.breakDuration} min` : 'No break';
+
       div.innerHTML = `
         <strong>${schedule.name}</strong> (${intervalsString})<br>
         Days: ${schedule.days.map(d => Object.keys(dayCheckboxes)[Object.values(dayCheckboxes).findIndex(cb => parseInt(cb.value) === d)] || 'N/A').join(', ')}<br>
         Sites: ${schedule.sites ? schedule.sites.length : 0}, Keywords: ${schedule.keywords ? schedule.keywords.length : 0}<br>
-        Redirect: ${schedule.redirectUrl || 'Global'}
+        Redirect: ${schedule.redirectUrl || 'Global'} | ${breakInfo}
       `;
       const editButton = document.createElement('button');
       editButton.textContent = 'Edit';
@@ -350,9 +360,97 @@ document.addEventListener('DOMContentLoaded', () => {
 
   addIntervalBtn.addEventListener('click', () => addIntervalToDOM());
 
+  // === Break Controls ===
+  function formatTime(seconds) {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${String(secs).padStart(2, '0')}`;
+  }
+
+  function updateBreakControls() {
+    chrome.runtime.sendMessage({ action: 'getBreakStatus' }, (response) => {
+      if (chrome.runtime.lastError) {
+        console.error('Error getting break status:', chrome.runtime.lastError);
+        return;
+      }
+
+      const breakStatuses = response || {};
+      let hasActiveOrAvailableBreak = false;
+      let html = '';
+
+      for (const [index, status] of Object.entries(breakStatuses)) {
+        if (status.breakDuration <= 0) continue; // Skip schedules without break configured
+
+        if (status.hasActiveBreak) {
+          hasActiveOrAvailableBreak = true;
+          const stateText = status.isPaused ? 'PAUSED' : 'RUNNING';
+          const stateClass = status.isPaused ? 'paused' : 'running';
+          html += `
+            <div class="break-control-item">
+              <div class="break-info">
+                <span class="break-schedule-name">${status.scheduleName}</span>
+                <span class="break-timer ${stateClass}">${formatTime(status.remainingSeconds)}</span>
+                <span class="break-state ${stateClass}">${stateText}</span>
+              </div>
+              <div class="break-buttons">
+                ${status.isPaused 
+                  ? `<button class="secondary-action" data-action="resume" data-index="${index}">Resume</button>`
+                  : `<button class="secondary-action" data-action="pause" data-index="${index}">Pause</button>`
+                }
+              </div>
+            </div>
+          `;
+        } else if (status.usedToday) {
+          // Break was used today already
+          html += `
+            <div class="break-control-item used">
+              <div class="break-info">
+                <span class="break-schedule-name">${status.scheduleName}</span>
+                <span class="break-used">Break used today</span>
+              </div>
+            </div>
+          `;
+          hasActiveOrAvailableBreak = true;
+        }
+      }
+
+      if (hasActiveOrAvailableBreak) {
+        breakControlsContainer.style.display = 'block';
+        breakControlsContent.innerHTML = html;
+        attachBreakButtonListeners();
+      } else {
+        breakControlsContainer.style.display = 'none';
+      }
+    });
+  }
+
+  function attachBreakButtonListeners() {
+    breakControlsContent.querySelectorAll('button[data-action]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const action = btn.dataset.action;
+        const index = parseInt(btn.dataset.index);
+        
+        let messageAction = '';
+        if (action === 'pause') messageAction = 'pauseBreak';
+        else if (action === 'resume') messageAction = 'resumeBreak';
+        
+        chrome.runtime.sendMessage({ action: messageAction, scheduleIndex: index }, (response) => {
+          if (response && response.success) {
+            updateBreakControls();
+          } else {
+            alert(response?.error || 'Failed to update break');
+          }
+        });
+      });
+    });
+  }
+
+  // Poll for break updates every second when popup is open
+  let breakUpdateInterval = setInterval(updateBreakControls, 1000);
+
   // Initial load
   loadSettings();
 
   // Set default tab to general
   document.querySelector('.tab-link[data-tab="general"]').click();
-}); 
+});

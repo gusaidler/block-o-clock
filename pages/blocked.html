@@ -354,6 +354,149 @@
       background: var(--amber);
       color: var(--void);
     }
+    
+    /* Break Section Styles */
+    .break-section {
+      background: var(--panel);
+      border: 1px solid var(--signal-green);
+      border-radius: 6px;
+      padding: 20px;
+      margin-bottom: 24px;
+    }
+    
+    .break-section h2 {
+      color: var(--signal-green);
+    }
+    
+    .break-schedule-item {
+      background: var(--panel-dark);
+      border: 1px solid var(--panel-border);
+      border-radius: 4px;
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+    
+    .break-schedule-item:last-child {
+      margin-bottom: 0;
+    }
+    
+    .break-schedule-name {
+      font-family: var(--font-display);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      color: var(--amber-bright);
+      display: block;
+      margin-bottom: 8px;
+    }
+    
+    .break-duration-info {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-bottom: 12px;
+    }
+    
+    .break-timer-display {
+      font-family: var(--font-mono);
+      font-size: 32px;
+      font-weight: 700;
+      text-align: center;
+      padding: 16px;
+      margin: 12px 0;
+      border-radius: 4px;
+    }
+    
+    .break-timer-display.running {
+      background: var(--signal-green);
+      color: var(--void);
+      animation: timerPulse 1s ease-in-out infinite;
+    }
+    
+    .break-timer-display.paused {
+      background: #FFA500;
+      color: var(--void);
+    }
+    
+    @keyframes timerPulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.85; }
+    }
+    
+    .break-state-label {
+      font-family: var(--font-display);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      text-align: center;
+      display: block;
+      margin-bottom: 12px;
+    }
+    
+    .break-state-label.running {
+      color: var(--signal-green);
+    }
+    
+    .break-state-label.paused {
+      color: #FFA500;
+    }
+    
+    .break-buttons {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+    }
+    
+    .break-btn {
+      font-family: var(--font-display);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .break-btn.start {
+      background: linear-gradient(180deg, var(--signal-green) 0%, #388E3C 100%);
+      color: white;
+      box-shadow: 0 2px 8px rgba(76, 175, 80, 0.4);
+    }
+    
+    .break-btn.start:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(76, 175, 80, 0.5);
+    }
+    
+    .break-btn.pause {
+      background: linear-gradient(180deg, #FFA500 0%, #E65100 100%);
+      color: white;
+    }
+    
+    .break-btn.resume {
+      background: linear-gradient(180deg, var(--signal-green) 0%, #388E3C 100%);
+      color: white;
+    }
+    
+    .break-btn.end {
+      background: linear-gradient(180deg, var(--signal-red) 0%, #C62828 100%);
+      color: white;
+    }
+    
+    .break-btn:hover {
+      transform: translateY(-1px);
+    }
+    
+    .break-used-message {
+      font-size: 12px;
+      color: var(--text-dim);
+      font-style: italic;
+      text-align: center;
+      padding: 12px;
+    }
   </style>
 </head>
 <body>
@@ -372,6 +515,14 @@
     <img src="" alt="Mission briefing visual" id="funnyImage">
     
     <p class="intro-message" id="introMessage">Target site identified as potential focus hazard. Automatic redirect engaged to maintain mission parameters.</p>
+    
+    <!-- Break Controls Section -->
+    <div id="breakSection" class="section break-section" style="display: none;">
+      <div class="section-header">
+        <h2>Break Available</h2>
+      </div>
+      <div id="breakContent"></div>
+    </div>
     
     <div class="section hints">
       <div class="section-header">
