@@ -3,127 +3,394 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Focus & Redirect</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <title>INTERCEPT // Block-O-Clock</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@300;400;500&display=swap');
+    
+    :root {
+      --void: #0a0a0c;
+      --panel-dark: #111114;
+      --panel: #18181c;
+      --panel-light: #222228;
+      --panel-border: #2a2a32;
+      --amber-dim: #8b6914;
+      --amber: #d4a017;
+      --amber-bright: #f5c842;
+      --amber-glow: rgba(212, 160, 23, 0.4);
+      --amber-subtle: rgba(212, 160, 23, 0.1);
+      --signal-red: #e53935;
+      --signal-red-glow: rgba(229, 57, 53, 0.3);
+      --signal-green: #4caf50;
+      --signal-cyan: #26c6da;
+      --text-primary: #e8e6e3;
+      --text-secondary: #9a9890;
+      --text-dim: #5a5850;
+      --font-display: 'Orbitron', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+    
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+    
     body {
-      font-family: 'Inter', sans-serif;
+      font-family: var(--font-mono);
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      background: var(--void);
+      color: var(--text-primary);
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      min-height: 100vh;
-      margin: 0;
-      background-color: #f4f7f6; /* Light, calm background */
-      color: #333;
-      padding: 20px;
-      box-sizing: border-box;
+      overflow-x: hidden;
+      position: relative;
     }
+    
+    /* Scanline effect */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0, 0, 0, 0.15) 2px,
+        rgba(0, 0, 0, 0.15) 4px
+      );
+      pointer-events: none;
+      z-index: 1000;
+    }
+    
+    /* Grid background */
+    body::after {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: 
+        linear-gradient(rgba(212, 160, 23, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(212, 160, 23, 0.03) 1px, transparent 1px);
+      background-size: 50px 50px;
+      pointer-events: none;
+      z-index: -1;
+    }
+    
     .container {
-      text-align: center;
-      background-color: #ffffff;
-      padding: 30px 40px;
-      border-radius: 12px;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-      max-width: 600px;
-      width: 100%;
+      position: relative;
+      max-width: 700px;
+      width: 95%;
+      padding: 40px;
+      background: var(--panel-dark);
+      border: 1px solid var(--panel-border);
+      border-top: 3px solid var(--signal-red);
+      animation: containerReveal 0.6s ease-out;
     }
+    
+    @keyframes containerReveal {
+      from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.98);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+    
+    /* Corner brackets */
+    .container::before,
+    .container::after {
+      content: '';
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      border: 2px solid var(--amber-dim);
+    }
+    
+    .container::before {
+      top: 10px;
+      left: 10px;
+      border-right: none;
+      border-bottom: none;
+    }
+    
+    .container::after {
+      bottom: 10px;
+      right: 10px;
+      border-left: none;
+      border-top: none;
+    }
+    
+    /* Alert header */
+    .alert-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px dashed var(--panel-border);
+    }
+    
+    .alert-icon {
+      width: 48px;
+      height: 48px;
+      border: 2px solid var(--signal-red);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: pulseRed 2s ease-in-out infinite;
+      flex-shrink: 0;
+    }
+    
+    @keyframes pulseRed {
+      0%, 100% { 
+        box-shadow: 0 0 0 0 var(--signal-red-glow), 0 0 20px var(--signal-red-glow); 
+      }
+      50% { 
+        box-shadow: 0 0 0 8px transparent, 0 0 30px var(--signal-red-glow); 
+      }
+    }
+    
+    .alert-icon::before {
+      content: '!';
+      font-family: var(--font-display);
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--signal-red);
+    }
+    
+    .alert-text {
+      flex: 1;
+    }
+    
+    .alert-label {
+      font-family: var(--font-display);
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--signal-red);
+      margin-bottom: 4px;
+      animation: blink 1.5s step-end infinite;
+    }
+    
+    @keyframes blink {
+      50% { opacity: 0.5; }
+    }
+    
     h1 {
-      color: #2c3e50; /* Calmer, professional blue */
-      font-size: 28px;
-      margin-bottom: 15px;
-      font-weight: 600;
-    }
-    p {
-      color: #555;
-      font-size: 16px;
-      line-height: 1.7;
-      margin-bottom: 25px;
-    }
-    .action-prompt {
-        font-weight: 500;
-        color: #3498db; /* Encouraging blue */
-    }
-    .section {
-      margin-top: 30px;
-      text-align: left;
-    }
-    .section h2 {
-      color: #3498db; /* Accent blue */
+      font-family: var(--font-display);
       font-size: 20px;
-      margin-bottom: 15px;
-      border-bottom: 1px solid #e0e0e0;
-      padding-bottom: 8px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--amber-bright);
+      margin: 0;
+      text-shadow: 0 0 20px var(--amber-glow);
+    }
+    
+    /* Funny image */
+    #funnyImage {
+      display: none;
+      max-width: 100%;
+      height: auto;
+      margin: 0 auto 24px;
+      border: 1px solid var(--panel-border);
+      filter: saturate(0.8) contrast(1.1);
+    }
+    
+    .intro-message {
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--text-secondary);
+      margin-bottom: 32px;
+      padding-left: 16px;
+      border-left: 2px solid var(--amber-dim);
+    }
+    
+    /* Section */
+    .section {
+      margin-top: 32px;
+    }
+    
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    
+    .section-header::before {
+      content: '///';
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-dim);
+    }
+    
+    h2 {
+      font-family: var(--font-display);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin: 0;
+    }
+    
+    /* Tips list */
+    .tips-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .tips-list li {
+      position: relative;
+      padding: 14px 14px 14px 40px;
+      margin-bottom: 8px;
+      background: var(--panel);
+      border: 1px solid var(--panel-border);
+      border-left: 3px solid var(--signal-cyan);
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--text-primary);
+      transition: all 0.2s ease;
+      animation: tipReveal 0.4s ease-out backwards;
+    }
+    
+    .tips-list li:nth-child(1) { animation-delay: 0.1s; }
+    .tips-list li:nth-child(2) { animation-delay: 0.2s; }
+    .tips-list li:nth-child(3) { animation-delay: 0.3s; }
+    .tips-list li:nth-child(4) { animation-delay: 0.4s; }
+    .tips-list li:nth-child(5) { animation-delay: 0.5s; }
+    
+    @keyframes tipReveal {
+      from {
+        opacity: 0;
+        transform: translateX(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+    
+    .tips-list li:hover {
+      background: var(--panel-light);
+      border-left-color: var(--amber);
+      transform: translateX(4px);
+    }
+    
+    .tips-list li::before {
+      content: '▸';
+      position: absolute;
+      left: 14px;
+      top: 14px;
+      color: var(--signal-cyan);
+      font-size: 12px;
+    }
+    
+    .tips-list li strong {
+      color: var(--amber-bright);
       font-weight: 500;
     }
-    .section ul {
-      list-style-type: none;
-      padding: 0;
-    }
-    .section ul li {
-      background-color: #f9f9f9;
-      padding: 12px 15px;
-      margin-bottom: 10px;
-      border-radius: 8px;
-      border-left: 4px solid #3498db;
-      font-size: 15px;
-      color: #444;
-      transition: transform 0.2s ease;
-    }
-    .section ul li:hover {
-        transform: translateX(5px);
-    }
-    .resources a {
-        color: #2980b9;
-        text-decoration: none;
-        font-weight: 500;
-    }
-    .resources a:hover {
-        text-decoration: underline;
-    }
+    
+    /* Footer */
     .footer-note {
-        margin-top: 30px;
-        font-size: 13px;
-        color: #777;
+      margin-top: 32px;
+      padding-top: 16px;
+      border-top: 1px dashed var(--panel-border);
+      font-size: 11px;
+      color: var(--text-dim);
+      text-align: center;
     }
-    .back-button {
-        display: inline-block;
-        margin-top: 20px;
-        padding: 10px 20px;
-        background-color: #3498db;
-        color: white;
-        text-decoration: none;
-        border-radius: 6px;
-        font-weight: 500;
-        transition: background-color 0.3s ease;
+    
+    .footer-note::before {
+      content: '◆';
+      margin-right: 8px;
+      color: var(--signal-green);
     }
-    .back-button:hover {
-        background-color: #2980b9;
+    
+    .footer-note::after {
+      content: '◆';
+      margin-left: 8px;
+      color: var(--signal-green);
     }
-
+    
+    /* Ambient glow */
+    .glow-orb {
+      position: fixed;
+      width: 400px;
+      height: 400px;
+      border-radius: 50%;
+      filter: blur(120px);
+      opacity: 0.15;
+      pointer-events: none;
+      z-index: -1;
+    }
+    
+    .glow-orb.amber {
+      background: var(--amber);
+      top: -100px;
+      right: -100px;
+    }
+    
+    .glow-orb.red {
+      background: var(--signal-red);
+      bottom: -150px;
+      left: -100px;
+    }
+    
+    /* Selection */
+    ::selection {
+      background: var(--amber);
+      color: var(--void);
+    }
   </style>
 </head>
 <body>
+  <div class="glow-orb amber"></div>
+  <div class="glow-orb red"></div>
+  
   <div class="container">
-    <img src="" alt="Funny redirection image" id="funnyImage" style="max-width: 100%; height: auto; margin-left: auto; margin-right: auto; margin-bottom: 20px; border-radius: 8px; display: none;">
-    <h1 id="mainHeadline">Let's Get Back to Focus!</h1>
-    <p id="introMessage">It looks like you were about to visit a site that might interrupt your flow. No worries, it happens!</p>
-
+    <div class="alert-header">
+      <div class="alert-icon"></div>
+      <div class="alert-text">
+        <div class="alert-label">◆ Distraction Intercepted ◆</div>
+        <h1 id="mainHeadline">Focus Protocol Engaged</h1>
+      </div>
+    </div>
+    
+    <img src="" alt="Mission briefing visual" id="funnyImage">
+    
+    <p class="intro-message" id="introMessage">Target site identified as potential focus hazard. Automatic redirect engaged to maintain mission parameters.</p>
+    
     <div class="section hints">
-    <h2 class="action-prompt" id="actionPrompt">Here are a few ideas to help you refocus and make the most of your time:</h2>
-      <ul id="refocusTipsList">
-        <li><strong>Take a Short Break:</strong> Stand up, stretch, or grab a glass of water.</li>
-        <li><strong>Review Your Goals:</strong> Briefly look at your to-do list for today.</li>
-        <li><strong>The Pomodoro Technique:</strong> Work in focused 25-minute intervals.</li>
-        <li><strong>Minimize Distractions:</strong> Close other unnecessary tabs or apps.</li>
-        <li><strong>One Task at a Time:</strong> Concentrate on completing a single task before moving on.</li>
+      <div class="section-header">
+        <h2 class="action-prompt" id="actionPrompt">Recommended Actions</h2>
+      </div>
+      <ul class="tips-list" id="refocusTipsList">
+        <li><strong>Tactical Pause:</strong> Stand up, stretch, recalibrate your systems.</li>
+        <li><strong>Mission Review:</strong> Check your objectives for today's operation.</li>
+        <li><strong>Pomodoro Protocol:</strong> Engage 25-minute focused work intervals.</li>
+        <li><strong>Clear the Deck:</strong> Close unnecessary tabs and applications.</li>
+        <li><strong>Single Target Focus:</strong> Complete one objective before engaging the next.</li>
       </ul>
     </div>
-
+    
     <p class="footer-note">
-      Remember, you can always adjust your Block-O-Clock settings via the extension icon.
+      Adjust mission parameters via the Block-O-Clock control panel
     </p>
   </div>
+  
   <script src="blocked.js"></script>
 </body>
-</html> 
+</html>
