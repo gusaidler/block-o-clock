@@ -3,325 +3,350 @@
         "headline": "Whoa there, Speedy Gonzales!",
         "intro": "Looks like your mouse was heading for a distraction fiesta! Let's steer back to the productivity ranch.",
         "actionPrompt": "Quick, before the procrastination monster wakes up, try one of these:",
-        "image": "content_not_available.gif",
         "funnyTips": [
             "<strong>Micro-Nap:</strong> Close your eyes for 60 seconds. Set a tiny alarm if you might accidentally nap for an hour.",
             "<strong>Hydration Hero:</strong> Chug a glass of water like you've just crossed a desert to find this very webpage.",
-            "<strong>Window Gaze:</strong> Look out the window and find the weirdest cloud. Give it a name.",
-            "<strong>Quick Doodle:</strong> Draw a tiny monster representing your next task. Now you gotta defeat it!",
-            "<strong>Mighty Mantra:</strong> Repeat 'I am a focus wizard!' three times. With feeling!"
+            "<strong>Window Gaze:</strong> Look out the window and find the weirdest cloud. Give it a name."
         ]
     },
     {
         "headline": "Not so fast, Keyboard Maverick!",
         "intro": "You've stumbled upon the focus zone checkpoint. This site is currently on a coffee break. And maybe you should take one too (a short one!).",
         "actionPrompt": "Consider these maneuvers to get back on course:",
-        "image": "content_not_available.gif",
         "funnyTips": [
             "<strong>Stretch Armstrong:</strong> Pretend your arms are noodles and then stretch them as far as they can go.",
             "<strong>Desk Safari:</strong> Spot 5 things on your desk you haven't noticed before. Marvel at their existence.",
-            "<strong>Silent Scream:</strong> If you need to, do it. Into a pillow. Soundlessly.",
-            "<strong>Two-Minute Tidy:</strong> Clear one small thing from your workspace. Tiny victory!",
-            "<strong>Air Drum Solo:</strong> To the beat of your own productivity. Neil Peart would be proud (probably)."
+            "<strong>Silent Scream:</strong> If you need to, do it. Into a pillow. Soundlessly."
         ]
     },
     {
         "headline": "Alert! Productivity Field Activated!",
         "intro": "This website is temporarily off-limits by order of the 'Get Stuff Done' council. Don't worry, it's for your own good!",
         "actionPrompt": "To re-engage your awesome brainpower, how about:",
-        "image": "content_not_available.gif",
         "funnyTips": [
             "<strong>Tell a Secret:</strong> Whisper your biggest work goal to your coffee mug. It's sworn to secrecy.",
             "<strong>Count Backwards:</strong> From 10. Slowly. Like a rocket launch, but for focus.",
-            "<strong>Shoulder Shrugs:</strong> Release that tension! 5 shrugs up to your ears, then relax.",
-            "<strong>Mini-Meditation:</strong> Focus on your breath for 10 inhales and exhales. That's it. You're a guru now.",
-            "<strong>The 'Why' Check:</strong> Remind yourself WHY you're doing what you're doing. Is it for the glory? The snacks?"
+            "<strong>Shoulder Shrugs:</strong> Release that tension! 5 shrugs up to your ears, then relax."
         ]
     },
     {
         "headline": "Oops! Did your focus just take a detour?",
         "intro": "It seems you were about to dive into a rabbit hole. Let's climb back out and get back to conquering your tasks!",
         "actionPrompt": "Try these detours back to a productive mindset:",
-        "image": "content_not_available.gif",
         "funnyTips": [
             "<strong>The Refocus Pose:</strong> Stand like a superhero for 30 seconds. Cape optional but encouraged.",
             "<strong>Mental Switch:</strong> Think of your brain as a computer. You just closed an app. Now open the 'Work' app.",
-            "<strong>Sniff Something Nice:</strong> A calming scent like lavender, or the smell of an old book. Or coffee. Always coffee.",
-            "<strong>Quick Plan:</strong> Jot down the VERY next small step for your main task. Just one.",
-            "<strong>High Five Yourself:</strong> You caught the distraction! Go you!"
+            "<strong>Sniff Something Nice:</strong> A calming scent like lavender, or the smell of an old book. Or coffee. Always coffee."
         ]
     },
     {
         "headline": "LEVEL UP YOUR FOCUS!",
         "intro": "Woah, looks like you took a wrong warp pipe into the Distraction Zone! Let's get you back to the main quest.",
         "actionPrompt": "Press START on one of these power-ups:",
-        "image": "content_not_available.gif",
         "funnyTips": [
             "<strong>Save Point:</strong> Write down what you were *just* about to do. Phew, progress saved!",
             "<strong>Boss Battle Prep:</strong> Tackle the smallest, easiest part of your task. Build that XP!",
-            "<strong>Health Potion:</strong> Drink some water. Low HP is bad for focus.",
-            "<strong>Scan for Glitches:</strong> Close any tabs or apps that aren't part of the current level.",
-            "<strong>1-Up Your To-Do List:</strong> Pick one thing and give it your full attention for 10 minutes. You got this, Player One!"
+            "<strong>Health Potion:</strong> Drink some water. Low HP is bad for focus."
         ]
     },
     {
         "headline": "Case of the Wandering Mind: SOLVED!",
         "intro": "Aha! We've found the culprit: a sneaky link trying to lead your attention astray. Elementary, my dear Watson!",
         "actionPrompt": "Here are some clues to get back on the case:",
-        "image": "content_not_available.gif",
         "funnyTips": [
             "<strong>Dust for Prints:</strong> Briefly review your notes or goals. What's the next lead?",
             "<strong>Interrogate a Rubber Duck:</strong> Explain your task out loud. You might uncover a breakthrough!",
-            "<strong>Stakeout (Mini):</strong> Observe your surroundings for 1 minute. What's *not* a distraction?",
-            "<strong>Follow the Evidence:</strong> Take one small step towards your goal. Every clue counts!",
-            "<strong>The Usual Suspects:</strong> Silence notifications. Don't let them derail your investigation!"
+            "<strong>Stakeout (Mini):</strong> Observe your surroundings for 1 minute. What's *not* a distraction?"
         ]
     },
     {
         "headline": "Houston, We Have a... Distraction!",
         "intro": "Your mission, should you choose to accept it, was focus. Looks like you veered off into an asteroid field of diversions!",
         "actionPrompt": "Re-engage thrusters with these coordinates:",
-        "image": "content_not_available.gif",
         "funnyTips": [
             "<strong>Pre-Flight Checklist:</strong> What's the #1 thing you need to launch next?",
             "<strong>Engage Warp Speed (for 5 mins):</strong> Hyperfocus on one task. No space debris allowed!",
-            "<strong>Oxygen Break:</strong> Step away, take 3 deep breaths. Refuel your brain tank.",
-            "<strong>Scan for Life Forms:</strong> (Just kidding). Scan your to-do list for the next objective.",
-            "<strong>Set Course for Planet Productivity:</strong> One small click for man, one giant leap for your workload."
+            "<strong>Oxygen Break:</strong> Step away, take 3 deep breaths. Refuel your brain tank."
         ]
     },
     {
         "headline": "Too Many Cooks in the Browser!",
         "intro": "Whoops! Looks like you almost added a dash of distraction to your recipe for success. Let's get back to the main course!",
         "actionPrompt": "Here's the secret sauce for regaining focus:",
-        "image": "content_not_available.gif",
         "funnyTips": [
             "<strong>Mise en Place:</strong> Get your mental ingredients ready. What's the next step?",
             "<strong>Simmer Down:</strong> Take a brief pause, like letting a good stew rest.",
-            "<strong>Taste Test:</strong> Review your last completed task. What worked well?",
-            "<strong>Sharpest Knife in the Drawer:</strong> Pick your most important tool (your brain!) and focus it.",
-            "<strong>One Bite at a Time:</strong> Break down a big task into smaller, digestible pieces."
+            "<strong>Taste Test:</strong> Review your last completed task. What worked well?"
         ]
     },
     {
         "headline": "Don't Feed the Distractions!",
         "intro": "Looks like a wild distraction appeared! They can be cute, but they'll eat your precious time. Let's gently guide it back to the wilderness.",
         "actionPrompt": "Follow these nature trails back to productivity:",
-        "image": "content_not_available.gif",
         "funnyTips": [
             "<strong>Be a Wise Owl:</strong> What's the wisest thing to do right now?",
             "<strong>The Early Bird Gets the Worm:</strong> Tackle one small task immediately.",
-            "<strong>Like a Bee to Honey:</strong> Focus on the sweetest part of your work (or the part that gets it done).",
-            "<strong>Hibernate (for 2 mins):</strong> Close your eyes, breathe, and let your brain reset.",
-            "<strong>Monkey Mind Tamer:</strong> Acknowledge distracting thoughts, then gently guide your attention back."
+            "<strong>Like a Bee to Honey:</strong> Focus on the sweetest part of your work (or the part that gets it done)."
         ]
     },
     {
         "headline": "Your Focus Signal is On!",
         "intro": "A citizen of your to-do list is in distress! It seems a villainous distraction nearly lured you away. To the Productiv-mobile!",
         "actionPrompt": "Activate your superpowers with these focus-enhancing gadgets:",
-        "image": "content_not_available.gif",
         "funnyTips": [
             "<strong>Identify Your Kryptonite:</strong> What's *really* distracting you? Neutralize it!",
             "<strong>X-Ray Vision:</strong> Look through the clutter and see your main goal.",
-            "<strong>Super Speed (for 1 task):</strong> Try to complete one very small task as fast as you can.",
-            "<strong>Invisibility Cloak:</strong> Make distractions invisible by closing unnecessary windows.",
-            "<strong>Assemble Your Avengers:</strong> (Your brain cells). Get them working together on the mission!"
+            "<strong>Super Speed (for 1 task):</strong> Try to complete one very small task as fast as you can."
         ]
     },
     {
         "headline": "Shiver Me Timbers! Off Course!",
         "intro": "Avast ye! Looks like ye were sailin' straight into the Sea of Lost Time! Let's get this ship back on course for Treasure Island (of Accomplishments)!",
         "actionPrompt": "Heave ho with these here instructions, matey:",
-        "image": "content_not_available.gif",
         "funnyTips": [
             "<strong>Consult the Map:</strong> Your to-do list is your treasure map. Where X marks the spot?",
             "<strong>Hoist the Main Sail:</strong> Pick your main task and give it all ye got!",
-            "<strong>Swab the Deck:</strong> Clear your mental (or actual) workspace a bit.",
-            "<strong>No Parley with Procrastination:</strong> Don't negotiate, just act!",
-            "<strong>Claim Yer Booty:</strong> Imagine the satisfaction of finishing! That's the real treasure."
+            "<strong>Swab the Deck:</strong> Clear your mental (or actual) workspace a bit."
         ]
     },
     {
         "headline": "Focus Pocus, Where'd It Go-cus?",
         "intro": "By Merlin's beard! A mischievous sprite of distraction tried to cast a spell on you! Time for some counter-magic.",
         "actionPrompt": "Recite these ancient enchantments for clarity:",
-        "image": "content_not_available.gif",
         "funnyTips": [
             "<strong>Summon Your Familiar:</strong> (A pen & paper). Jot down the next step.",
             "<strong>Scrying Orb (Water Glass):</strong> Gaze into it thoughtfully for 30 seconds. Then drink it.",
-            "<strong>Invisibility Charm:</strong> Make distracting sites disappear (close tabs).",
-            "<strong>Potion of Productivity:</strong> A quick stretch and a deep breath.",
-            "<strong>Transfigure Your Task:</strong> Break a big task into tiny, less intimidating magical creatures."
+            "<strong>Invisibility Charm:</strong> Make distracting sites disappear (close tabs)."
         ]
     },
     {
         "headline": "LOGIC ERROR: Focus Module Offline!",
         "intro": "Bzzzt! Your programming seems to have encountered an unscheduled detour subroutine. Recalibrating for optimal task completion.",
         "actionPrompt": "Initiate these diagnostic protocols:",
-        "image": "content_not_available.gif",
         "funnyTips": [
             "<strong>Reboot Sequence:</strong> Stand up, turn around, sit down. System restarted.",
             "<strong>Scan for Malware:</strong> What thought-viruses are slowing you down?",
-            "<strong>Run `defrag_brain.exe`:</strong> Take 5 deep breaths to clear mental cache.",
-            "<strong>Update Priority Matrix:</strong> What is your primary directive right now?",
-            "<strong>Engage Single-Tasking Mode:</strong> Multitasking is a known bug."
+            "<strong>Run `defrag_brain.exe`:</strong> Take 5 deep breaths to clear mental cache."
         ]
     },
     {
         "headline": "HARD HAT AREA: Focus Under Construction!",
         "intro": "Hold up there, partner! Looks like you were about to drive your productivity bulldozer into a ditch of distractions. Let's get back to building something great!",
         "actionPrompt": "Grab your tools and these blueprints for success:",
-        "image": "content_not_available.gif",
         "funnyTips": [
             "<strong>Check the Foundation:</strong> What's the most important task holding everything up?",
             "<strong>Lay One Brick:</strong> Do one small, concrete action towards your goal.",
-            "<strong>Safety Break:</strong> A quick 2-minute stretch. Safety first!",
-            "<strong>Measure Twice, Cut Once:</strong> Briefly plan your next move before diving in.",
-            "<strong>Admire Your Handiwork:</strong> Look at what you've already built today!"
+            "<strong>Safety Break:</strong> A quick 2-minute stretch. Safety first!"
         ]
     },
     {
         "headline": "Greetings Earthling! Lost Your Focus Beam?",
         "intro": "It appears your tractor beam of attention was momentarily diverted by an unidentified flying object of distraction. We come in peace... to bring you back to your mission.",
         "actionPrompt": "Use these advanced alien techniques to re-engage:",
-        "image": "content_not_available.gif",
         "funnyTips": [
             "<strong>Mind Meld with Your Task:</strong> Try to understand it from a new perspective.",
             "<strong>Activate Hyperdrive (for 10 mins):</strong> Intense focus, no incoming transmissions!",
-            "<strong>Analyze Earthling Distraction Patterns:</strong> What usually throws you off? Avoid it!",
-            "<strong>Universal Translator (To-Do List):</strong> Make sure your next step is clearly understood.",
-            "<strong>Phone Home (Your Inner Focus):</strong> Reconnect with your purpose."
+            "<strong>Analyze Earthling Distraction Patterns:</strong> What usually throws you off? Avoid it!"
         ]
     },
     {
         "headline": "Wakey Wakey, Brain Cells!",
         "intro": "Oh dear, did your focus just doze off and dream of other websites? Let's gently nudge it awake before it starts snoring.",
         "actionPrompt": "Try these gentle alarm clocks for your attention:",
-        "image": "content_not_available.gif",
         "funnyTips": [
             "<strong>Pillow Talk (with your To-Do List):</strong> Whisper your next task to it. It's less intimidating that way.",
             "<strong>Stretch Like a Cat:</strong> A big, luxurious stretch to get the blood flowing.",
-            "<strong>Splash of Cold Water (Metaphorical):</strong> A quick glance at your deadline!",
-            "<strong>No Hitting Snooze on Tasks:</strong> Pick one small thing and do it NOW.",
-            "<strong>Dream of Accomplishment:</strong> Visualize how good it'll feel to finish."
+            "<strong>Splash of Cold Water (Metaphorical):</strong> A quick glance at your deadline!"
         ]
     },
     {
         "headline": "Great Scott! You've Distracted the Timeline!",
         "intro": "By veering off course, you nearly created a paradox where your work doesn't get done! We must return to the correct point in your productivity continuum.",
         "actionPrompt": "Synchronize your watches and follow these temporal directives:",
-        "image": "content_not_available.gif",
         "funnyTips": [
             "<strong>Check Your Flux Capacitor (Brain):</strong> Is it charged and ready for focused work?",
             "<strong>Return to a Key Moment:</strong> What were you *just* about to do before the temporal anomaly?",
-            "<strong>Avoid Butterfly Effects:</strong> Small distractions can have big consequences. Stay on target!",
-            "<strong>Set Your Destination (Time: 5 Mins Ago):</strong> Mentally go back and restart your focus.",
-            "<strong>Future You Will Thank You:</strong> Seriously, get this done. Future You is counting on it."
+            "<strong>Avoid Butterfly Effects:</strong> Small distractions can have big consequences. Stay on target!"
         ]
     },
     {
         "headline": "Eureka! I've Found... a Distraction!",
         "intro": "My hypothesis was that you'd stay focused, but this new variable (a tempting website) has skewed the results! Back to the laboratory of productivity!",
         "actionPrompt": "Conduct these experiments in concentration:",
-        "image": "content_not_available.gif",
         "funnyTips": [
             "<strong>Formulate a Hypothesis:</strong> 'If I focus for 10 minutes, I will achieve X.'",
             "<strong>Isolate the Variable:</strong> Close all other tabs and apps. Only the experiment matters.",
-            "<strong>Observe and Record:</strong> How does it feel to make progress? Note for future experiments.",
-            "<strong>Peer Review (with a Pet/Plant):</strong> Explain your task. They might have insights (or just look cute).",
-            "<strong>Publish Your Findings (Complete the Task):</strong> Success! Time for a celebratory cackle."
+            "<strong>Observe and Record:</strong> How does it feel to make progress? Note for future experiments."
         ]
     },
     {
         "headline": "Lost the Tempo? Let's Get Back in Rhythm!",
         "intro": "Whoa, it looks like your focus went off-key and was about to join a different band called 'The Procrastinators'. Time for a soundcheck!",
         "actionPrompt": "Tune up your concentration with these riffs:",
-        "image": "content_not_available.gif",
         "funnyTips": [
             "<strong>Find Your Key Signature:</strong> What's the most important note (task) to hit right now?",
             "<strong>Practice Your Scales (Small Steps):</strong> Warm up with an easy part of your task.",
-            "<strong>Silent Rehearsal:</strong> Mentally walk through what you need to do.",
-            "<strong>One-Man Band Mode:</strong> Focus all your instruments (senses, brain) on one piece.",
-            "<strong>Encore! (After a Short Break):</strong> Once you finish a bit, take a bow, then get ready for the next set."
+            "<strong>Silent Rehearsal:</strong> Mentally walk through what you need to do."
         ]
     },
     {
         "headline": "Hold Your Horses, Web Wanderer!",
         "intro": "Looks like your cursor was about to gallop off into the sunset of distraction. Let's rein it in and get back to the task corral!",
         "actionPrompt": "Try these rodeo tricks to wrangle your focus:",
-        "image": "content_not_available.gif",
         "funnyTips": [
             "<strong>Quick Lasso:</strong> Snag your most immediate task and pull it closer.",
             "<strong>Trail Boss Tip:</strong> Identify the next waypoint on your project map.",
-            "<strong>Watering Hole Break:</strong> Take a quick sip of water – keep that brain hydrated!",
-            "<strong>Count the Herd:</strong> Quickly list 3 things you want to accomplish next.",
-            "<strong>Sunrise Stretch:</strong> Reach for the sky like you're greeting a new day of productivity."
+            "<strong>Watering Hole Break:</strong> Take a quick sip of water \u2013 keep that brain hydrated!"
         ]
     },
     {
         "headline": "Attention! Focus Drill Sergeant On Deck!",
         "intro": "Your concentration was about to go AWOL! Time for some mental push-ups to get back in fighting shape.",
         "actionPrompt": "Drop and give me 20... seconds of focus with these drills:",
-        "image": "content_not_available.gif",
         "funnyTips": [
             "<strong>At Ease, Browser:</strong> Close unnecessary tabs. Stand down, distractions!",
             "<strong>Forward March (on your task list):</strong> Pick one objective and advance.",
-            "<strong>Ten-Hut (for Ten Breaths):</strong> Focus on your breathing. Inhale discipline, exhale chaos.",
-            "<strong>Recon Mission:</strong> Briefly scan your main goal. What's the terrain?",
-            "<strong>Debrief:</strong> After a short work burst, acknowledge your victory, soldier!"
+            "<strong>Ten-Hut (for Ten Breaths):</strong> Focus on your breathing. Inhale discipline, exhale chaos."
         ]
     },
     {
         "headline": "Danger, Will Robinson! Distraction Approaching!",
         "intro": "Your internal sensors detected a deviation from the path of productivity. Recalibrating trajectory immediately!",
         "actionPrompt": "Activate these emergency protocols:",
-        "image": "content_not_available.gif",
         "funnyTips": [
             "<strong>Shields Up!:</strong> Minimize distracting applications.",
             "<strong>Course Correction:</strong> Glance at your to-do list and select the next nav point.",
-            "<strong>Life Support Check (Hydration):</strong> Drink a glass of water.",
-            "<strong>Scan for Anomalies:</strong> Are there any tasks masquerading as urgent but aren't?",
-            "<strong>Engage Main Thrusters:</strong> Dive into your primary task for 5 minutes straight."
+            "<strong>Life Support Check (Hydration):</strong> Drink a glass of water."
         ]
     },
     {
         "headline": "This Page is Guarded by a Focus Dragon!",
         "intro": "ROAR! You were about to wander into the lair of procrastination. I am here to protect your precious hoard of productivity!",
         "actionPrompt": "Offer one of these tributes to the Focus Dragon:",
-        "image": "content_not_available.gif",
         "funnyTips": [
             "<strong>Polish a Gem:</strong> Work on one small, shiny part of your task.",
             "<strong>Count Your Gold:</strong> Review what you've already accomplished today.",
-            "<strong>Sharpen Your Claws:</strong> Prepare your tools (software, notes) for the next assault on your to-do list.",
-            "<strong>Breathe Fire (Metaphorically):</strong> Take a powerful, deep breath to energize yourself.",
-            "<strong>Scout the Territory:</strong> Plan your next three small steps."
+            "<strong>Sharpen Your Claws:</strong> Prepare your tools (software, notes) for the next assault on your to-do list."
         ]
     },
     {
         "headline": "Red Alert! Distraction Incursion!",
         "intro": "Captain, the ship's focus shields are down! We've detected an unauthorized entry into the Procrastination Quadrant. All hands to battle stations!",
         "actionPrompt": "Execute these tactical maneuvers:",
-        "image": "content_not_available.gif",
         "funnyTips": [
             "<strong>Evasive Maneuvers:</strong> Close the distracting tab or window NOW!",
             "<strong>Set Phasers to Stunning (Focus):</strong> Pick one task and give it your undivided attention.",
-            "<strong>Damage Report:</strong> Quick! What were you *just* working on?",
-            "<strong>Re-route Power to Main Systems:</strong> Commit to 5 minutes of deep work.",
-            "<strong>Captain's Log:</strong> Note down your next immediate objective."
+            "<strong>Damage Report:</strong> Quick! What were you *just* working on?"
         ]
     },
     {
         "headline": "The Focus Librarian Says 'Shhh!'",
         "intro": "It appears you were about to make some noise in the quiet zone of productivity. Let's find our way back to the silent study hall of getting things done.",
         "actionPrompt": "Please observe these library rules for concentration:",
-        "image": "content_not_available.gif",
         "funnyTips": [
             "<strong>Return Your Overdue Tasks:</strong> Pick one small thing and complete it.",
             "<strong>Consult the Card Catalog (Your To-Do List):</strong> What subject are you researching next?",
-            "<strong>Find a Quiet Nook:</strong> Minimize external noise and visual distractions.",
-            "<strong>Read One Chapter:</strong> Focus on one section of your work for a set period.",
-            "<strong>Due Date Reminder:</strong> Glance at your deadlines to reignite urgency."
+            "<strong>Find a Quiet Nook:</strong> Minimize external noise and visual distractions."
+        ]
+    },
+    {
+        "headline": "Mamma Mia! Wrong Recipe, Friend-o!",
+        "intro": "Ey, you almost-a click on the wrong-a ingredient! We make-a the productivity, not the procrastination pasta!",
+        "actionPrompt": "Let's-a get back to cooking success, yes?",
+        "funnyTips": [
+            "<strong>Check-a Your Menu:</strong> What's the special today? Focus on that one dish.",
+            "<strong>Prep Your Station:</strong> Clear the clutter like you're prepping for the dinner rush.",
+            "<strong>Kiss the Chef:</strong> Give yourself a compliment for catching that distraction!"
+        ]
+    },
+    {
+        "headline": "Beep Boop! Productivity Bot Activated!",
+        "intro": "WARNING: Distraction detected in sector 7G. Deploying counter-measures to restore optimal workflow.",
+        "actionPrompt": "Running focus restoration protocols:",
+        "funnyTips": [
+            "<strong>Memory Bank Scan:</strong> What task did you schedule for this time slot?",
+            "<strong>Clear Temp Files:</strong> Close everything not related to your current objective.",
+            "<strong>Battery Check:</strong> Are you running low on energy? Quick snack or water break!"
+        ]
+    },
+    {
+        "headline": "Whoa There, Speed Racer!",
+        "intro": "Your focus mobile was about to veer off the productivity track! Let's get you back in the race.",
+        "actionPrompt": "Pit stop procedures for peak performance:",
+        "funnyTips": [
+            "<strong>Check Your Fuel:</strong> Are you tired? A quick break might help you finish faster.",
+            "<strong>Review the Track:</strong> Look at your to-do list and pick the next checkpoint.",
+            "<strong>Green Flag Mindset:</strong> You're back in the race! Hit the gas on one task."
+        ]
+    },
+    {
+        "headline": "Knightly Quest Interrupted!",
+        "intro": "Halt, brave warrior! A digital dragon tried to lure you from your noble quest. Let us return to vanquishing thy tasks!",
+        "actionPrompt": "Arm thyself with these honorable tactics:",
+        "funnyTips": [
+            "<strong>Consult Thy Quest Log:</strong> What challenge awaits completion?",
+            "<strong>Sharpen Thy Blade:</strong> Prepare thy tools and focus thy mind.",
+            "<strong>Battle Cry:</strong> Declare aloud what you will accomplish next!"
+        ]
+    },
+    {
+        "headline": "The Focus Gardener Has Arrived!",
+        "intro": "Looks like some weeds of distraction tried to grow in your productivity garden. Time to tend to what matters!",
+        "actionPrompt": "Cultivate your concentration with these green-thumb tips:",
+        "funnyTips": [
+            "<strong>Pull the Weeds:</strong> Close distracting tabs and apps immediately.",
+            "<strong>Water Your Goals:</strong> Give attention to the most important task right now.",
+            "<strong>Watch It Grow:</strong> Spend just 5 minutes on your task and see progress bloom."
+        ]
+    },
+    {
+        "headline": "DJ Focus in the House!",
+        "intro": "Yo yo yo! Your productivity track was about to get scratched by a distraction remix. Let's drop the beat back to work mode!",
+        "actionPrompt": "Spin these tracks to get back in the groove:",
+        "funnyTips": [
+            "<strong>Drop the Bass (Line Task):</strong> What's the foundation? Start there.",
+            "<strong>Mix It Up:</strong> If you're stuck, switch to a different part of the same project.",
+            "<strong>Volume Check:</strong> Silence notifications. Only your work gets airtime now."
+        ]
+    },
+    {
+        "headline": "Circus Ringmaster Says: Back to Center Ring!",
+        "intro": "Ladies and gentlemen! Our daring performer almost wandered into the sideshow tent! Let's return to the main attraction: your productivity!",
+        "actionPrompt": "Step right up and try these amazing feats:",
+        "funnyTips": [
+            "<strong>The Balancing Act:</strong> What's the one task that everything else depends on?",
+            "<strong>Juggle Less:</strong> Focus on catching just one ball at a time.",
+            "<strong>The Grand Finale:</strong> Visualize completing your task. The crowd goes wild!"
+        ]
+    },
+    {
+        "headline": "Weather Alert: Distraction Storm Passing!",
+        "intro": "Good news! The forecast shows clearing skies ahead. Let's navigate back to sunny productivity conditions.",
+        "actionPrompt": "Follow this meteorological guidance:",
+        "funnyTips": [
+            "<strong>Check the Radar:</strong> What tasks are on the horizon?",
+            "<strong>Batten Down the Hatches:</strong> Secure your focus by eliminating distractions.",
+            "<strong>Eye of the Storm:</strong> Find your calm center and work from there."
+        ]
+    },
+    {
+        "headline": "Architect's Blueprint: Focus Foundation Needed!",
+        "intro": "Your productivity structure needs attention! A distraction tried to compromise the design. Let's reinforce those foundations.",
+        "actionPrompt": "Review these structural improvements:",
+        "funnyTips": [
+            "<strong>Load-Bearing Wall:</strong> Identify the most critical task supporting everything else.",
+            "<strong>Inspect the Site:</strong> Clear away debris (close unnecessary apps/tabs).",
+            "<strong>Follow the Blueprint:</strong> Stick to your plan for the next 15 minutes."
+        ]
+    },
+    {
+        "headline": "Submarine Diving! Focus Depth Achieved!",
+        "intro": "Dive dive dive! We're going deep into productive waters, away from the surface distractions.",
+        "actionPrompt": "Engage these underwater operations:",
+        "funnyTips": [
+            "<strong>Periscope Up:</strong> Take a quick look at your main objective.",
+            "<strong>Silent Running:</strong> Mute all notifications for deep focus.",
+            "<strong>Torpedo Launch:</strong> Fire off one completed task. Direct hit!"
         ]
     }
 ]

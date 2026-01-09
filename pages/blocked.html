@@ -3,545 +3,131 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>INTERCEPT // Block-O-Clock</title>
+  <title>Refocus • Block‑O‑Clock</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@300;400;500&display=swap');
-    
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
+
     :root {
-      --void: #0a0a0c;
-      --panel-dark: #111114;
-      --panel: #18181c;
-      --panel-light: #222228;
-      --panel-border: #2a2a32;
-      --amber-dim: #8b6914;
-      --amber: #d4a017;
-      --amber-bright: #f5c842;
-      --amber-glow: rgba(212, 160, 23, 0.4);
-      --amber-subtle: rgba(212, 160, 23, 0.1);
-      --signal-red: #e53935;
-      --signal-red-glow: rgba(229, 57, 53, 0.3);
-      --signal-green: #4caf50;
-      --signal-cyan: #26c6da;
-      --text-primary: #e8e6e3;
-      --text-secondary: #9a9890;
-      --text-dim: #5a5850;
-      --font-display: 'Orbitron', sans-serif;
-      --font-mono: 'JetBrains Mono', monospace;
+      --bg: #F7F9F8;
+      --surface: #FFFFFF;
+      --surface-2: #F3F6F5;
+      --border: #E1EAE8;
+      --text: #0F1716;
+      --muted: #5E6B69;
+      --muted-2: #7D8A88;
+      --accent: #28A69A;
+      --accent-700: #1E857B;
+      --accent-100: #E6F6F4;
+      --danger: #D03B3B;
+      --font-display: 'DM Sans', system-ui, -apple-system, Segoe UI, sans-serif;
+      --font-body: 'DM Sans', system-ui, -apple-system, Segoe UI, sans-serif;
+      --radius: 16px;
+      --shadow-1: 0 2px 10px rgba(15,23,22,.06), 0 18px 48px rgba(15,23,22,.06);
     }
-    
-    *, *::before, *::after {
-      box-sizing: border-box;
-    }
-    
+
+    *, *::before, *::after { box-sizing: border-box; }
+
     body {
-      font-family: var(--font-mono);
       margin: 0;
-      padding: 0;
       min-height: 100vh;
-      background: var(--void);
-      color: var(--text-primary);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      overflow-x: hidden;
-      position: relative;
+      font-family: var(--font-body);
+      color: var(--text);
+      background:
+        radial-gradient(1200px 600px at 20% -10%, #F3F7F6 0%, transparent 60%),
+        radial-gradient(1000px 500px at 120% 10%, #F0F6F5 0%, transparent 60%),
+        var(--bg);
+      display: grid;
+      place-items: center;
+      padding: 28px 16px;
     }
-    
-    /* Scanline effect */
-    body::before {
-      content: '';
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: repeating-linear-gradient(
-        0deg,
-        transparent,
-        transparent 2px,
-        rgba(0, 0, 0, 0.15) 2px,
-        rgba(0, 0, 0, 0.15) 4px
-      );
-      pointer-events: none;
-      z-index: 1000;
-    }
-    
-    /* Grid background */
-    body::after {
-      content: '';
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: 
-        linear-gradient(rgba(212, 160, 23, 0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(212, 160, 23, 0.03) 1px, transparent 1px);
-      background-size: 50px 50px;
-      pointer-events: none;
-      z-index: -1;
-    }
-    
+
     .container {
-      position: relative;
-      max-width: 700px;
-      width: 95%;
-      padding: 40px;
-      background: var(--panel-dark);
-      border: 1px solid var(--panel-border);
-      border-top: 3px solid var(--signal-red);
-      animation: containerReveal 0.6s ease-out;
+      width: min(760px, 100%);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-1);
+      padding: 28px;
+      animation: fadeUp .35s ease-out;
     }
-    
-    @keyframes containerReveal {
-      from {
-        opacity: 0;
-        transform: translateY(20px) scale(0.98);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-      }
-    }
-    
-    /* Corner brackets */
-    .container::before,
-    .container::after {
-      content: '';
-      position: absolute;
-      width: 30px;
-      height: 30px;
-      border: 2px solid var(--amber-dim);
-    }
-    
-    .container::before {
-      top: 10px;
-      left: 10px;
-      border-right: none;
-      border-bottom: none;
-    }
-    
-    .container::after {
-      bottom: 10px;
-      right: 10px;
-      border-left: none;
-      border-top: none;
-    }
-    
-    /* Alert header */
-    .alert-header {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 24px;
-      padding-bottom: 16px;
-      border-bottom: 1px dashed var(--panel-border);
-    }
-    
-    .alert-icon {
-      width: 48px;
-      height: 48px;
-      border: 2px solid var(--signal-red);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      animation: pulseRed 2s ease-in-out infinite;
-      flex-shrink: 0;
-    }
-    
-    @keyframes pulseRed {
-      0%, 100% { 
-        box-shadow: 0 0 0 0 var(--signal-red-glow), 0 0 20px var(--signal-red-glow); 
-      }
-      50% { 
-        box-shadow: 0 0 0 8px transparent, 0 0 30px var(--signal-red-glow); 
-      }
-    }
-    
-    .alert-icon::before {
-      content: '!';
-      font-family: var(--font-display);
-      font-size: 24px;
-      font-weight: 700;
-      color: var(--signal-red);
-    }
-    
-    .alert-text {
-      flex: 1;
-    }
-    
-    .alert-label {
-      font-family: var(--font-display);
-      font-size: 10px;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      color: var(--signal-red);
-      margin-bottom: 4px;
-      animation: blink 1.5s step-end infinite;
-    }
-    
-    @keyframes blink {
-      50% { opacity: 0.5; }
-    }
-    
-    h1 {
-      font-family: var(--font-display);
-      font-size: 20px;
-      font-weight: 700;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: var(--amber-bright);
-      margin: 0;
-      text-shadow: 0 0 20px var(--amber-glow);
-    }
-    
-    /* Funny image */
-    #funnyImage {
-      display: none;
-      max-width: 100%;
-      height: auto;
-      margin: 0 auto 24px;
-      border: 1px solid var(--panel-border);
-      filter: saturate(0.8) contrast(1.1);
-    }
-    
-    .intro-message {
-      font-size: 14px;
-      line-height: 1.7;
-      color: var(--text-secondary);
-      margin-bottom: 32px;
-      padding-left: 16px;
-      border-left: 2px solid var(--amber-dim);
-    }
-    
-    /* Section */
-    .section {
-      margin-top: 32px;
-    }
-    
-    .section-header {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 16px;
-    }
-    
-    .section-header::before {
-      content: '///';
-      font-family: var(--font-mono);
-      font-size: 12px;
-      color: var(--text-dim);
-    }
-    
-    h2 {
-      font-family: var(--font-display);
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: var(--amber);
-      margin: 0;
-    }
-    
-    /* Tips list */
-    .tips-list {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-    
-    .tips-list li {
-      position: relative;
-      padding: 14px 14px 14px 40px;
-      margin-bottom: 8px;
-      background: var(--panel);
-      border: 1px solid var(--panel-border);
-      border-left: 3px solid var(--signal-cyan);
-      font-size: 13px;
-      line-height: 1.6;
-      color: var(--text-primary);
-      transition: all 0.2s ease;
-      animation: tipReveal 0.4s ease-out backwards;
-    }
-    
-    .tips-list li:nth-child(1) { animation-delay: 0.1s; }
-    .tips-list li:nth-child(2) { animation-delay: 0.2s; }
-    .tips-list li:nth-child(3) { animation-delay: 0.3s; }
-    .tips-list li:nth-child(4) { animation-delay: 0.4s; }
-    .tips-list li:nth-child(5) { animation-delay: 0.5s; }
-    
-    @keyframes tipReveal {
-      from {
-        opacity: 0;
-        transform: translateX(-10px);
-      }
-      to {
-        opacity: 1;
-        transform: translateX(0);
-      }
-    }
-    
-    .tips-list li:hover {
-      background: var(--panel-light);
-      border-left-color: var(--amber);
-      transform: translateX(4px);
-    }
-    
-    .tips-list li::before {
-      content: '▸';
-      position: absolute;
-      left: 14px;
-      top: 14px;
-      color: var(--signal-cyan);
-      font-size: 12px;
-    }
-    
-    .tips-list li strong {
-      color: var(--amber-bright);
-      font-weight: 500;
-    }
-    
-    /* Footer */
-    .footer-note {
-      margin-top: 32px;
-      padding-top: 16px;
-      border-top: 1px dashed var(--panel-border);
-      font-size: 11px;
-      color: var(--text-dim);
-      text-align: center;
-    }
-    
-    .footer-note::before {
-      content: '◆';
-      margin-right: 8px;
-      color: var(--signal-green);
-    }
-    
-    .footer-note::after {
-      content: '◆';
-      margin-left: 8px;
-      color: var(--signal-green);
-    }
-    
-    /* Ambient glow */
-    .glow-orb {
-      position: fixed;
-      width: 400px;
-      height: 400px;
-      border-radius: 50%;
-      filter: blur(120px);
-      opacity: 0.15;
-      pointer-events: none;
-      z-index: -1;
-    }
-    
-    .glow-orb.amber {
-      background: var(--amber);
-      top: -100px;
-      right: -100px;
-    }
-    
-    .glow-orb.red {
-      background: var(--signal-red);
-      bottom: -150px;
-      left: -100px;
-    }
-    
-    /* Selection */
-    ::selection {
-      background: var(--amber);
-      color: var(--void);
-    }
-    
-    /* Break Section Styles */
-    .break-section {
-      background: var(--panel);
-      border: 1px solid var(--signal-green);
-      border-radius: 6px;
-      padding: 20px;
-      margin-bottom: 24px;
-    }
-    
-    .break-section h2 {
-      color: var(--signal-green);
-    }
-    
-    .break-schedule-item {
-      background: var(--panel-dark);
-      border: 1px solid var(--panel-border);
-      border-radius: 4px;
-      padding: 16px;
-      margin-bottom: 12px;
-    }
-    
-    .break-schedule-item:last-child {
-      margin-bottom: 0;
-    }
-    
-    .break-schedule-name {
-      font-family: var(--font-display);
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: 1px;
-      color: var(--amber-bright);
-      display: block;
-      margin-bottom: 8px;
-    }
-    
-    .break-duration-info {
-      font-size: 12px;
-      color: var(--text-secondary);
-      margin-bottom: 12px;
-    }
-    
-    .break-timer-display {
-      font-family: var(--font-mono);
-      font-size: 32px;
-      font-weight: 700;
-      text-align: center;
-      padding: 16px;
-      margin: 12px 0;
-      border-radius: 4px;
-    }
-    
-    .break-timer-display.running {
-      background: var(--signal-green);
-      color: var(--void);
-      animation: timerPulse 1s ease-in-out infinite;
-    }
-    
-    .break-timer-display.paused {
-      background: #FFA500;
-      color: var(--void);
-    }
-    
-    @keyframes timerPulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.85; }
-    }
-    
-    .break-state-label {
-      font-family: var(--font-display);
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      text-align: center;
-      display: block;
-      margin-bottom: 12px;
-    }
-    
-    .break-state-label.running {
-      color: var(--signal-green);
-    }
-    
-    .break-state-label.paused {
-      color: #FFA500;
-    }
-    
-    .break-buttons {
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-    }
-    
-    .break-btn {
-      font-family: var(--font-display);
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      padding: 12px 24px;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-    
-    .break-btn.start {
-      background: linear-gradient(180deg, var(--signal-green) 0%, #388E3C 100%);
-      color: white;
-      box-shadow: 0 2px 8px rgba(76, 175, 80, 0.4);
-    }
-    
-    .break-btn.start:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 16px rgba(76, 175, 80, 0.5);
-    }
-    
-    .break-btn.pause {
-      background: linear-gradient(180deg, #FFA500 0%, #E65100 100%);
-      color: white;
-    }
-    
-    .break-btn.resume {
-      background: linear-gradient(180deg, var(--signal-green) 0%, #388E3C 100%);
-      color: white;
-    }
-    
-    .break-btn.end {
-      background: linear-gradient(180deg, var(--signal-red) 0%, #C62828 100%);
-      color: white;
-    }
-    
-    .break-btn:hover {
-      transform: translateY(-1px);
-    }
-    
-    .break-used-message {
-      font-size: 12px;
-      color: var(--text-dim);
-      font-style: italic;
-      text-align: center;
-      padding: 12px;
-    }
+
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(10px);} to {opacity:1; transform:none;} }
+
+    /* Header */
+    .alert-header { display: grid; grid-template-columns: auto 1fr; gap: 12px; align-items: center; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+    .alert-icon { width: 12px; height: 12px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 6px rgba(40,166,154,.12); }
+    .alert-label { font-family: var(--font-display); font-size: 12px; color: var(--muted); letter-spacing: .2px; }
+
+    h1 { font-family: var(--font-display); font-size: 24px; letter-spacing: .2px; margin: 2px 0 0; }
+
+    .intro-message { color: var(--muted); margin: 6px 0 18px; font-size: 15px; line-height: 1.7; }
+
+    /* Break section */
+    .break-section { background: var(--accent-100); border: 1px solid rgba(40,166,154,.28); border-radius: 14px; padding: 16px; margin: 16px 0; }
+    .section-header { margin-bottom: 8px; }
+    h2 { font-family: var(--font-display); font-size: 14px; margin: 0; color: var(--accent-700); }
+
+    .break-schedule-item { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px; margin-bottom: 10px; }
+    .break-schedule-name { font-family: var(--font-display); font-size: 13px; font-weight: 700; color: var(--accent-700); }
+    .break-duration-info { color: var(--muted); font-size: 13px; }
+    .break-timer-display { font-family: var(--font-display); font-weight: 700; text-align: center; margin: 10px 0; padding: 10px; border-radius: 10px; }
+    .break-timer-display.running { background: var(--accent-700); color: white; }
+    .break-timer-display.paused { background: #FFE8B7; color: #5C4500; }
+    .break-state-label { display:block; text-align:center; font-family: var(--font-display); font-size: 11px; color: var(--muted-2); margin-bottom: 8px; }
+    .break-state-label.running { color: var(--accent-700); }
+
+    .break-buttons { display:flex; justify-content:center; gap: 10px; }
+    .break-btn { border: 1px solid var(--border); background: var(--surface); color: var(--text); font-family: var(--font-display); font-weight: 700; padding: 10px 16px; border-radius: 10px; cursor: pointer; }
+    .break-btn.start, .break-btn.resume { background: radial-gradient(120% 100% at 50% 0%, #2CB0A4 0%, #249A8F 100%); border-color: transparent; color: white; }
+    .break-btn.pause { background: #FFE8B7; color: #5C4500; border-color: #FFDFA0; }
+    .break-btn.end { background: #FCEAEA; color: #B12626; border-color: #F2C7C7; }
+
+    /* Tips */
+    .tips-list { list-style: none; padding: 0; margin: 0; }
+    .tips-list li { position: relative; padding: 12px 12px 12px 36px; border: 1px solid var(--border); background: var(--surface-2); border-radius: 12px; margin-bottom: 8px; font-size: 14px; color: var(--text); }
+    .tips-list li::before { content: ''; position: absolute; left: 12px; top: 50%; width: 14px; height: 14px; border-radius: 50%; transform: translateY(-50%); background: var(--accent); box-shadow: 0 0 0 4px rgba(40,166,154,.12); }
+    .tips-list li strong { color: var(--text); font-weight: 700; }
+
+    .footer-note { margin-top: 22px; padding-top: 12px; border-top: 1px solid var(--border); color: var(--muted); font-size: 12px; text-align: center; }
+
+    ::selection { background: var(--accent); color: white; }
   </style>
 </head>
 <body>
-  <div class="glow-orb amber"></div>
-  <div class="glow-orb red"></div>
-  
   <div class="container">
     <div class="alert-header">
       <div class="alert-icon"></div>
-      <div class="alert-text">
-        <div class="alert-label">◆ Distraction Intercepted ◆</div>
-        <h1 id="mainHeadline">Focus Protocol Engaged</h1>
+      <div>
+        <div class="alert-label">Distraction intercepted</div>
+        <h1 id="mainHeadline">Refocus, then continue</h1>
       </div>
     </div>
-    
-    <img src="" alt="Mission briefing visual" id="funnyImage">
-    
-    <p class="intro-message" id="introMessage">Target site identified as potential focus hazard. Automatic redirect engaged to maintain mission parameters.</p>
-    
-    <!-- Break Controls Section -->
+
+    <p class="intro-message" id="introMessage">This page was blocked to protect your attention. Take a breath, choose your next action, and get back to what matters.</p>
+
     <div id="breakSection" class="section break-section" style="display: none;">
       <div class="section-header">
-        <h2>Break Available</h2>
+        <h2>Break available</h2>
       </div>
       <div id="breakContent"></div>
     </div>
-    
+
     <div class="section hints">
       <div class="section-header">
-        <h2 class="action-prompt" id="actionPrompt">Recommended Actions</h2>
+        <h2 class="action-prompt" id="actionPrompt">Quick resets</h2>
       </div>
       <ul class="tips-list" id="refocusTipsList">
-        <li><strong>Tactical Pause:</strong> Stand up, stretch, recalibrate your systems.</li>
-        <li><strong>Mission Review:</strong> Check your objectives for today's operation.</li>
-        <li><strong>Pomodoro Protocol:</strong> Engage 25-minute focused work intervals.</li>
-        <li><strong>Clear the Deck:</strong> Close unnecessary tabs and applications.</li>
-        <li><strong>Single Target Focus:</strong> Complete one objective before engaging the next.</li>
+        <li><strong>Stand and breathe</strong> for 10 deep breaths.</li>
+        <li><strong>Confirm your next task</strong> in one sentence.</li>
+        <li><strong>Work 25 minutes</strong> with notifications off.</li>
+        <li><strong>Close stray tabs</strong> that don't serve the task.</li>
+        <li><strong>Finish one thing</strong> before starting another.</li>
       </ul>
     </div>
-    
-    <p class="footer-note">
-      Adjust mission parameters via the Block-O-Clock control panel
-    </p>
+
+    <p class="footer-note">Adjust settings any time from the Block‑O‑Clock panel</p>
   </div>
-  
+
   <script src="blocked.js"></script>
 </body>
 </html>
