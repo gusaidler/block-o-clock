@@ -10,101 +10,102 @@
   <div class="container">
     <header class="app-header">
       <h1>Block-O-Clock</h1>
-      <!-- Simple tab navigation -->
       <nav class="tab-nav">
-        <button class="tab-link active" data-tab="general">General</button>
-        <button class="tab-link" data-tab="schedules">Schedules</button>
+        <button class="tab-link active" data-tab="blocking">Blocking</button>
         <button class="tab-link" data-tab="settings">Settings</button>
       </nav>
     </header>
 
     <main>
-      <!-- General Blocking Rules Tab -->
-      <div id="general" class="tab-content active">
-        <h2>Always-On Blocking</h2>
-        <p>Rules here apply all the time, regardless of schedules.</p>
-        <div class="input-group">
-          <input type="text" id="newBlockedSite" placeholder="Add URL (e.g., example.com)">
-          <button id="addBlockedSite" class="primary-action">Add URL</button>
-        </div>
-        <div class="input-group">
-          <input type="text" id="newBlockedKeyword" placeholder="Add Keyword (e.g., news)">
-          <button id="addBlockedKeyword" class="primary-action">Add Keyword</button>
-        </div>
-        <ul id="blockedItemsList" class="items-list"></ul>
-      </div>
-
-      <!-- Schedules Tab -->
-      <div id="schedules" class="tab-content">
-        <h2>Scheduled Blocking</h2>
-        <p>Create time-based rules for blocking specific sites or keywords.</p>
+      <!-- Unified Blocking Tab -->
+      <div id="blocking" class="tab-content active">
         
-        <!-- Active Break Controls -->
-        <div id="breakControlsContainer" class="break-controls-container" style="display: none;">
-          <h3>Active Break</h3>
-          <div id="breakControlsContent"></div>
-        </div>
-
-        <div id="scheduleList" class="schedule-items-container"></div>
-        <button id="addScheduleBtn" class="primary-action full-width">Create New Schedule</button>
-
-        <div id="scheduleFormContainer" class="modal-form" style="display:none;">
-          <h3 id="scheduleFormTitle">Add New Schedule</h3>
-          <input type="hidden" id="editingScheduleIndex" value="-1">
+        <!-- Always-On Section -->
+        <section class="panel-section">
+          <h2>Always-On Rules</h2>
+          <p>These blocks are active 24/7, no schedule required.</p>
+          <div class="input-group">
+            <input type="text" id="newBlockedSite" placeholder="Add URL (e.g., example.com)">
+            <button id="addBlockedSite" class="primary-action">Add URL</button>
+          </div>
+          <div class="input-group">
+            <input type="text" id="newBlockedKeyword" placeholder="Add Keyword (e.g., news)">
+            <button id="addBlockedKeyword" class="primary-action">Add Keyword</button>
+          </div>
+          <ul id="blockedItemsList" class="items-list"></ul>
+        </section>
+        
+        <!-- Schedules Section -->
+        <section class="panel-section">
+          <h2>Scheduled Rules</h2>
+          <p>Time-based blocking for specific days and hours.</p>
           
-          <label for="scheduleName">Schedule Name:</label>
-          <input type="text" id="scheduleName" placeholder="e.g., Focus Hours">
-
-          <label>Active Days:</label>
-          <div class="days-selector">
-            <input type="checkbox" id="dayMon" value="1"><label for="dayMon">M</label>
-            <input type="checkbox" id="dayTue" value="2"><label for="dayTue">T</label>
-            <input type="checkbox" id="dayWed" value="3"><label for="dayWed">W</label>
-            <input type="checkbox" id="dayThu" value="4"><label for="dayThu">T</label>
-            <input type="checkbox" id="dayFri" value="5"><label for="dayFri">F</label>
-            <input type="checkbox" id="daySat" value="6"><label for="daySat">S</label>
-            <input type="checkbox" id="daySun" value="0"><label for="daySun">S</label>
+          <!-- Active Break Controls -->
+          <div id="breakControlsContainer" class="break-controls-container" style="display: none;">
+            <h3>Active Break</h3>
+            <div id="breakControlsContent"></div>
           </div>
 
-          <div class="time-inputs-container">
-            <label>Time Intervals:</label>
-            <div id="timeIntervalsList">
-              <!-- Time interval pairs will be added here by JS -->
-              <div class="time-interval-pair">
-                <input type="time" class="startTimeInput" value="09:00">
-                <span>-</span>
-                <input type="time" class="endTimeInput" value="17:00">
-                <button type="button" class="removeIntervalBtn">Remove</button>
-              </div>
+          <div id="scheduleList" class="schedule-items-container"></div>
+          <button id="addScheduleBtn" class="primary-action full-width">Create New Schedule</button>
+
+          <div id="scheduleFormContainer" class="modal-form" style="display:none;">
+            <h3 id="scheduleFormTitle">Add New Schedule</h3>
+            <input type="hidden" id="editingScheduleIndex" value="-1">
+            
+            <label for="scheduleName">Schedule Name:</label>
+            <input type="text" id="scheduleName" placeholder="e.g., Focus Hours">
+
+            <label>Active Days:</label>
+            <div class="days-selector">
+              <input type="checkbox" id="dayMon" value="1"><label for="dayMon">M</label>
+              <input type="checkbox" id="dayTue" value="2"><label for="dayTue">T</label>
+              <input type="checkbox" id="dayWed" value="3"><label for="dayWed">W</label>
+              <input type="checkbox" id="dayThu" value="4"><label for="dayThu">T</label>
+              <input type="checkbox" id="dayFri" value="5"><label for="dayFri">F</label>
+              <input type="checkbox" id="daySat" value="6"><label for="daySat">S</label>
+              <input type="checkbox" id="daySun" value="0"><label for="daySun">S</label>
             </div>
-            <button type="button" id="addIntervalBtn" class="secondary-action">Add Time Interval</button>
-          </div>
 
-          <label for="breakDuration">Break Duration (minutes):</label>
-          <div class="input-group">
-            <input type="number" id="breakDuration" min="0" max="120" value="0" placeholder="0 = no break">
-            <span class="input-hint">0 = no break allowed</span>
-          </div>
+            <div class="time-inputs-container">
+              <label>Time Intervals:</label>
+              <div id="timeIntervalsList">
+                <div class="time-interval-pair">
+                  <input type="time" class="startTimeInput" value="09:00">
+                  <span>-</span>
+                  <input type="time" class="endTimeInput" value="17:00">
+                  <button type="button" class="removeIntervalBtn">Remove</button>
+                </div>
+              </div>
+              <button type="button" id="addIntervalBtn" class="secondary-action">Add Time Interval</button>
+            </div>
 
-          <label for="scheduleRedirectUrl">Redirect to (optional):</label>
-          <input type="text" id="scheduleRedirectUrl" placeholder="Default: pages/blocked.html">
-          
-          <h4>Blocked Content for this Schedule:</h4>
-          <div class="input-group">
-            <input type="text" id="newScheduleSite" placeholder="Add URL for this schedule">
-            <button id="addScheduleSiteBtn">Add URL</button>
+            <label for="breakDuration">Break Duration (minutes):</label>
+            <div class="input-group">
+              <input type="number" id="breakDuration" min="0" max="120" value="0" placeholder="0 = no break">
+              <span class="input-hint">0 = no break allowed</span>
+            </div>
+
+            <label for="scheduleRedirectUrl">Redirect to (optional):</label>
+            <input type="text" id="scheduleRedirectUrl" placeholder="Default: pages/blocked.html">
+            
+            <h4>Blocked Content for this Schedule:</h4>
+            <div class="input-group">
+              <input type="text" id="newScheduleSite" placeholder="Add URL for this schedule">
+              <button id="addScheduleSiteBtn">Add URL</button>
+            </div>
+            <div class="input-group">
+              <input type="text" id="newScheduleKeyword" placeholder="Add Keyword for this schedule">
+              <button id="addScheduleKeywordBtn">Add Keyword</button>
+            </div>
+            <ul id="scheduleSpecificItemsList" class="items-list small-list"></ul>
+            
+            <div class="form-actions">
+              <button id="saveScheduleBtn" class="primary-action">Save Schedule</button>
+              <button id="cancelScheduleBtn" class="secondary-action">Cancel</button>
+            </div>
           </div>
-          <div class="input-group">
-            <input type="text" id="newScheduleKeyword" placeholder="Add Keyword for this schedule">
-            <button id="addScheduleKeywordBtn">Add Keyword</button>
-          </div>
-          <ul id="scheduleSpecificItemsList" class="items-list small-list"></ul>
-          
-          <div class="form-actions">
-            <button id="saveScheduleBtn" class="primary-action">Save Schedule</button>
-            <button id="cancelScheduleBtn" class="secondary-action">Cancel</button>
-          </div>
-        </div>
+        </section>
       </div>
 
       <!-- Settings/Global Redirect Tab -->

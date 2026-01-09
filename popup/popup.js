@@ -451,6 +451,6 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initial load
   loadSettings();
 
-  // Set default tab to general
-  document.querySelector('.tab-link[data-tab="general"]').click();
+  // Set default tab to blocking
+  document.querySelector('.tab-link[data-tab="blocking"]').click();
 });

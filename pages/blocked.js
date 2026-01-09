@@ -23,19 +23,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const mainHeadline = document.getElementById('mainHeadline');
             const introMessage = document.getElementById('introMessage');
             const actionPrompt = document.getElementById('actionPrompt');
-            const funnyImage = document.getElementById('funnyImage');
             const refocusTipsList = document.getElementById('refocusTipsList');
 
             if (mainHeadline) mainHeadline.textContent = selectedContent.headline;
             if (introMessage) introMessage.textContent = selectedContent.intro;
             if (actionPrompt) actionPrompt.textContent = selectedContent.actionPrompt;
-            if (funnyImage && selectedContent.image) {
-                funnyImage.src = selectedContent.image;
-                funnyImage.alt = selectedContent.headline; // Use headline as alt text
-                funnyImage.style.display = 'block';
-            } else if (funnyImage) {
-                funnyImage.style.display = 'none'; // Hide if no image URL
-            }
 
             if (refocusTipsList && selectedContent.funnyTips && selectedContent.funnyTips.length > 0) {
                 refocusTipsList.innerHTML = ''; // Clear existing static tips
@@ -62,12 +54,10 @@ function displayStaticFallback() {
     const introMessage = document.getElementById('introMessage');
     const actionPrompt = document.getElementById('actionPrompt');
     const refocusTipsList = document.getElementById('refocusTipsList');
-    const funnyImage = document.getElementById('funnyImage');
 
     if (mainHeadline) mainHeadline.textContent = "Time to Refocus!";
     if (introMessage) introMessage.textContent = "Looks like that site is taking a break. Good time to get back on track!";
     if (actionPrompt) actionPrompt.textContent = "Here are some classic refocus tips:";
-    if (funnyImage) funnyImage.style.display = 'none'; // Hide image on fallback
 
     if (refocusTipsList) {
         refocusTipsList.innerHTML = ''; // Clear just in case
