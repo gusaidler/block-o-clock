@@ -1,11 +1,12 @@
 let blockedSites = []; // { type: 'url' | 'keyword', value: 'example.com' }
-let schedules = []; // { name: 'Work Hours', days: [1,2,3,4,5], startTime: '09:00', endTime: '17:00', sites: [], keywords: [], redirectUrl: 'pages/blocked.html', breakDuration: 30 }
+let schedules = []; // { name: 'Work Hours', days: [1,2,3,4,5], startTime: '09:00', endTime: '17:00', sites: [], keywords: [], redirectUrl: 'pages/blocked.html' }
 let globalRedirectUrl = 'pages/blocked.html';
-let activeBreaks = {}; // { [scheduleIndex]: { remainingSeconds, isPaused, lastUsedDate } }
+let globalBreakDuration = 30; // minutes
+let globalBreak = null; // { remainingSeconds, isPaused, lastUsedDate }
 let breakTimerInterval = null;
 
 // Load settings from storage when the extension starts
-chrome.storage.local.get(['blockedSites', 'schedules', 'globalRedirectUrl', 'activeBreaks'], (result) => {
+chrome.storage.local.get(['blockedSites', 'schedules', 'globalRedirectUrl', 'globalBreakDuration', 'globalBreak'], (result) => {
   if (result.blockedSites) {
     blockedSites = result.blockedSites;
   }
@@ -15,12 +16,17 @@ chrome.storage.local.get(['blockedSites', 'schedules', 'globalRedirectUrl', 'act
   if (result.globalRedirectUrl) {
     globalRedirectUrl = result.globalRedirectUrl;
   }
-  if (result.activeBreaks) {
-    activeBreaks = result.activeBreaks;
-    // Resume timer if there are active unpaused breaks
+  if (result.globalBreakDuration !== undefined) {
+    globalBreakDuration = result.globalBreakDuration;
+  }
+  if (result.globalBreak) {
+    globalBreak = result.globalBreak;
+    // Clear if from previous day
+    clearStaleBreak();
+    // Resume timer if break is active and unpaused
     startBreakTimerIfNeeded();
   }
-  console.log('Initial settings loaded:', { blockedSites, schedules, globalRedirectUrl, activeBreaks });
+  console.log('Initial settings loaded:', { blockedSites, schedules, globalRedirectUrl, globalBreakDuration, globalBreak });
 });
 
 // Listen for messages from the popup to update settings
@@ -29,14 +35,18 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     blockedSites = message.settings.blockedSites || [];
     schedules = message.settings.schedules || [];
     globalRedirectUrl = message.settings.globalRedirectUrl || 'pages/blocked.html';
+    if (message.settings.globalBreakDuration !== undefined) {
+      globalBreakDuration = message.settings.globalBreakDuration;
+    }
     chrome.storage.local.set(
       {
         blockedSites: blockedSites,
         schedules: schedules,
         globalRedirectUrl: globalRedirectUrl,
+        globalBreakDuration: globalBreakDuration,
       },
       () => {
-        console.log('Settings updated:', { blockedSites, schedules, globalRedirectUrl });
+        console.log('Settings updated:', { blockedSites, schedules, globalRedirectUrl, globalBreakDuration });
         sendResponse({ status: 'success' });
       }
     );
@@ -44,36 +54,37 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   }
 
   if (message.action === 'startBreak') {
-    const result = handleStartBreak(message.scheduleIndex);
+    const result = handleStartBreak();
     sendResponse(result);
     return true;
   }
 
   if (message.action === 'pauseBreak') {
-    const result = handlePauseBreak(message.scheduleIndex);
+    const result = handlePauseBreak();
     sendResponse(result);
     return true;
   }
 
   if (message.action === 'resumeBreak') {
-    const result = handleResumeBreak(message.scheduleIndex);
-    sendResponse(result);
-    return true;
-  }
-
-  if (message.action === 'endBreak') {
-    const result = handleEndBreak(message.scheduleIndex);
+    const result = handleResumeBreak();
     sendResponse(result);
     return true;
   }
 
   if (message.action === 'getBreakStatus') {
-    sendResponse(getBreakStatus());
+    sendResponse(getGlobalBreakStatus());
     return true;
   }
 
-  if (message.action === 'getActiveSchedulesForBreak') {
-    sendResponse(getActiveSchedulesForBreak());
+  if (message.action === 'getActiveBreakForOverlay') {
+    sendResponse(getActiveBreakForOverlay());
+    return true;
+  }
+
+  if (message.action === 'checkIfCurrentUrlBlocked') {
+    const url = message.url;
+    const result = isCurrentlyBlocked(url);
+    sendResponse(result);
     return true;
   }
 });
@@ -93,7 +104,6 @@ function isCurrentlyBlocked(url) {
   const currentDay = getCurrentDay();
   let siteIsBlocked = false;
   let effectiveRedirectUrl = globalRedirectUrl;
-  let blockingScheduleIndex = -1;
 
   // Helper function to check if a URL matches a blocked pattern
   const matchesPattern = (urlToCheck, pattern) => {
@@ -116,17 +126,20 @@ function isCurrentlyBlocked(url) {
     }
   };
   
-  // Check general blocked sites (not tied to a schedule)
+  // Check always-on blocked sites FIRST - these are ALWAYS enforced regardless of break
   for (const site of blockedSites) {
     if (site.type === 'url' && matchesPattern(url, site.value)) {
-      siteIsBlocked = true;
-      break;
+      return { blocked: true, redirectUrl: effectiveRedirectUrl };
     }
     // Keyword matching remains as .includes, as keywords are expected to be substrings
     if (site.type === 'keyword' && url.toLowerCase().includes(site.value.toLowerCase())) {
-      siteIsBlocked = true;
-      break;
+      return { blocked: true, redirectUrl: effectiveRedirectUrl };
     }
+  }
+
+  // If global break is active and running, don't block scheduled content
+  if (globalBreak && !globalBreak.isPaused && globalBreak.remainingSeconds > 0) {
+    return { blocked: false };
   }
 
   // Check schedules
@@ -150,19 +163,11 @@ function isCurrentlyBlocked(url) {
     }
 
     if (isInDay && isInTime) {
-      // Check if this schedule has an active unpaused break
-      const breakState = activeBreaks[i];
-      if (breakState && !breakState.isPaused && breakState.remainingSeconds > 0) {
-        // Break is active and running - don't block for this schedule
-        continue;
-      }
-
       // This schedule is active, check its sites and keywords
       for (const blocked of schedule.sites) {
         if (matchesPattern(url, blocked)) {
           siteIsBlocked = true;
           effectiveRedirectUrl = schedule.redirectUrl || globalRedirectUrl;
-          blockingScheduleIndex = i;
           break;
         }
       }
@@ -172,7 +177,6 @@ function isCurrentlyBlocked(url) {
         if (url.toLowerCase().includes(keyword.toLowerCase())) {
           siteIsBlocked = true;
           effectiveRedirectUrl = schedule.redirectUrl || globalRedirectUrl;
-          blockingScheduleIndex = i;
           break;
         }
       }
@@ -181,7 +185,7 @@ function isCurrentlyBlocked(url) {
   }
 
   return siteIsBlocked 
-    ? { blocked: true, redirectUrl: effectiveRedirectUrl, scheduleIndex: blockingScheduleIndex } 
+    ? { blocked: true, redirectUrl: effectiveRedirectUrl } 
     : { blocked: false };
 }
 
@@ -215,7 +219,9 @@ chrome.webNavigation.onBeforeNavigate.addListener(
         return;
       }
 
-      chrome.tabs.update(details.tabId, { url: finalRedirectUrl });
+      // Append the original URL as a query parameter so blocked page can redirect back after break
+      const redirectWithOriginal = `${finalRedirectUrl}?blockedUrl=${encodeURIComponent(details.url)}`;
+      chrome.tabs.update(details.tabId, { url: redirectWithOriginal });
     }
   },
   { url: [{ schemes: ['http', 'https'] }] }
@@ -228,240 +234,139 @@ function getTodayDateString() {
   return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
 }
 
-function saveActiveBreaks() {
-  chrome.storage.local.set({ activeBreaks }, () => {
-    console.log('Active breaks saved:', activeBreaks);
+function clearStaleBreak() {
+  const today = getTodayDateString();
+  
+  if (globalBreak && globalBreak.lastUsedDate !== today) {
+    globalBreak = null;
+    saveGlobalBreak();
+    console.log('Cleared stale global break from previous day');
+  }
+}
+
+function saveGlobalBreak() {
+  chrome.storage.local.set({ globalBreak }, () => {
+    console.log('Global break saved:', globalBreak);
   });
 }
 
-function updateBadge() {
-  // Find the first active unpaused break to display
-  let displayBreak = null;
-  let displayIndex = null;
-  
-  for (const [index, breakState] of Object.entries(activeBreaks)) {
-    if (breakState && breakState.remainingSeconds > 0) {
-      if (!breakState.isPaused) {
-        displayBreak = breakState;
-        displayIndex = index;
-        break; // Prefer unpaused breaks
-      } else if (!displayBreak) {
-        displayBreak = breakState;
-        displayIndex = index;
-      }
-    }
-  }
-
-  if (displayBreak) {
-    const mins = Math.floor(displayBreak.remainingSeconds / 60);
-    const secs = displayBreak.remainingSeconds % 60;
-    const text = mins > 0 ? `${mins}:${String(secs).padStart(2, '0')}` : `${secs}s`;
-    
-    chrome.action.setBadgeText({ text });
-    chrome.action.setBadgeBackgroundColor({ 
-      color: displayBreak.isPaused ? '#FFA500' : '#4CAF50' // Orange if paused, green if running
-    });
-  } else {
-    chrome.action.setBadgeText({ text: '' });
-  }
-}
-
 function startBreakTimerIfNeeded() {
-  // Check if there are any active unpaused breaks
-  const hasActiveBreak = Object.values(activeBreaks).some(
-    b => b && !b.isPaused && b.remainingSeconds > 0
-  );
+  const hasActiveBreak = globalBreak && !globalBreak.isPaused && globalBreak.remainingSeconds > 0;
 
   if (hasActiveBreak && !breakTimerInterval) {
     breakTimerInterval = setInterval(tickBreakTimer, 1000);
     console.log('Break timer started');
   }
-  updateBadge();
 }
 
 function stopBreakTimerIfNotNeeded() {
-  const hasActiveBreak = Object.values(activeBreaks).some(
-    b => b && !b.isPaused && b.remainingSeconds > 0
-  );
+  const hasActiveBreak = globalBreak && !globalBreak.isPaused && globalBreak.remainingSeconds > 0;
 
   if (!hasActiveBreak && breakTimerInterval) {
     clearInterval(breakTimerInterval);
     breakTimerInterval = null;
     console.log('Break timer stopped');
   }
-  updateBadge();
 }
 
 function tickBreakTimer() {
-  let changed = false;
+  // Check for day change (midnight crossover)
+  clearStaleBreak();
   
-  for (const [index, breakState] of Object.entries(activeBreaks)) {
-    if (breakState && !breakState.isPaused && breakState.remainingSeconds > 0) {
-      breakState.remainingSeconds--;
-      changed = true;
-      
-      if (breakState.remainingSeconds <= 0) {
-        console.log(`Break for schedule ${index} has expired`);
-        // Keep the record so we know it was used today, but mark as done
-        breakState.remainingSeconds = 0;
-        breakState.isPaused = true;
-      }
+  if (globalBreak && !globalBreak.isPaused && globalBreak.remainingSeconds > 0) {
+    globalBreak.remainingSeconds--;
+    
+    if (globalBreak.remainingSeconds <= 0) {
+      console.log('Global break has expired');
+      globalBreak.remainingSeconds = 0;
+      globalBreak.isPaused = true;
     }
-  }
-
-  if (changed) {
-    saveActiveBreaks();
-    updateBadge();
+    
+    saveGlobalBreak();
     stopBreakTimerIfNotNeeded();
   }
 }
 
-function handleStartBreak(scheduleIndex) {
-  const schedule = schedules[scheduleIndex];
-  if (!schedule) {
-    return { success: false, error: 'Schedule not found' };
-  }
-
-  const breakDuration = schedule.breakDuration || 0;
-  if (breakDuration <= 0) {
-    return { success: false, error: 'No break duration configured for this schedule' };
+function handleStartBreak() {
+  if (globalBreakDuration <= 0) {
+    return { success: false, error: 'No break duration configured' };
   }
 
   const today = getTodayDateString();
-  const existingBreak = activeBreaks[scheduleIndex];
 
   // Check if break was already used today
-  if (existingBreak && existingBreak.lastUsedDate === today && existingBreak.remainingSeconds <= 0) {
-    return { success: false, error: 'Break already used today for this schedule' };
+  if (globalBreak && globalBreak.lastUsedDate === today && globalBreak.remainingSeconds <= 0) {
+    return { success: false, error: 'Break already used today' };
   }
 
   // If there's an existing break with time remaining, don't restart
-  if (existingBreak && existingBreak.remainingSeconds > 0) {
+  if (globalBreak && globalBreak.remainingSeconds > 0) {
     return { success: false, error: 'Break already active' };
   }
 
   // Start new break
-  activeBreaks[scheduleIndex] = {
-    remainingSeconds: breakDuration * 60,
+  globalBreak = {
+    remainingSeconds: globalBreakDuration * 60,
     isPaused: false,
     lastUsedDate: today
   };
 
-  saveActiveBreaks();
+  saveGlobalBreak();
   startBreakTimerIfNeeded();
-  console.log(`Break started for schedule ${scheduleIndex}: ${breakDuration} minutes`);
+  console.log(`Global break started: ${globalBreakDuration} minutes`);
   
-  return { success: true, remainingSeconds: activeBreaks[scheduleIndex].remainingSeconds };
+  return { success: true, remainingSeconds: globalBreak.remainingSeconds };
 }
 
-function handlePauseBreak(scheduleIndex) {
-  const breakState = activeBreaks[scheduleIndex];
-  if (!breakState || breakState.remainingSeconds <= 0) {
+function handlePauseBreak() {
+  if (!globalBreak || globalBreak.remainingSeconds <= 0) {
     return { success: false, error: 'No active break to pause' };
   }
 
-  breakState.isPaused = true;
-  saveActiveBreaks();
+  globalBreak.isPaused = true;
+  saveGlobalBreak();
   stopBreakTimerIfNotNeeded();
-  console.log(`Break paused for schedule ${scheduleIndex}`);
+  console.log('Global break paused');
   
-  return { success: true, remainingSeconds: breakState.remainingSeconds };
+  return { success: true, remainingSeconds: globalBreak.remainingSeconds };
 }
 
-function handleResumeBreak(scheduleIndex) {
-  const breakState = activeBreaks[scheduleIndex];
-  if (!breakState || breakState.remainingSeconds <= 0) {
+function handleResumeBreak() {
+  if (!globalBreak || globalBreak.remainingSeconds <= 0) {
     return { success: false, error: 'No break to resume' };
   }
 
-  breakState.isPaused = false;
-  saveActiveBreaks();
+  globalBreak.isPaused = false;
+  saveGlobalBreak();
   startBreakTimerIfNeeded();
-  console.log(`Break resumed for schedule ${scheduleIndex}`);
+  console.log('Global break resumed');
   
-  return { success: true, remainingSeconds: breakState.remainingSeconds };
+  return { success: true, remainingSeconds: globalBreak.remainingSeconds };
 }
 
-function handleEndBreak(scheduleIndex) {
-  const breakState = activeBreaks[scheduleIndex];
-  if (!breakState) {
-    return { success: false, error: 'No break to end' };
-  }
-
-  // Mark break as used up
-  breakState.remainingSeconds = 0;
-  breakState.isPaused = true;
-  
-  saveActiveBreaks();
-  stopBreakTimerIfNotNeeded();
-  console.log(`Break ended for schedule ${scheduleIndex}`);
-  
-  return { success: true };
-}
-
-function getBreakStatus() {
+function getGlobalBreakStatus() {
   const today = getTodayDateString();
-  const status = {};
+  
+  return {
+    breakDuration: globalBreakDuration,
+    hasActiveBreak: globalBreak && globalBreak.remainingSeconds > 0,
+    remainingSeconds: globalBreak ? globalBreak.remainingSeconds : 0,
+    isPaused: globalBreak ? globalBreak.isPaused : false,
+    usedToday: globalBreak && globalBreak.lastUsedDate === today && globalBreak.remainingSeconds <= 0,
+    canStartBreak: globalBreakDuration > 0 && 
+      (!globalBreak || globalBreak.lastUsedDate !== today || globalBreak.remainingSeconds > 0)
+  };
+}
 
-  for (let i = 0; i < schedules.length; i++) {
-    const schedule = schedules[i];
-    const breakState = activeBreaks[i];
-    
-    status[i] = {
-      scheduleName: schedule.name,
-      breakDuration: schedule.breakDuration || 0,
-      hasActiveBreak: breakState && breakState.remainingSeconds > 0,
-      remainingSeconds: breakState ? breakState.remainingSeconds : 0,
-      isPaused: breakState ? breakState.isPaused : false,
-      usedToday: breakState && breakState.lastUsedDate === today && breakState.remainingSeconds <= 0,
-      canStartBreak: (schedule.breakDuration || 0) > 0 && 
-        (!breakState || breakState.lastUsedDate !== today || breakState.remainingSeconds > 0)
+function getActiveBreakForOverlay() {
+  if (globalBreak && globalBreak.remainingSeconds > 0) {
+    return {
+      hasActiveBreak: true,
+      remainingSeconds: globalBreak.remainingSeconds,
+      isPaused: globalBreak.isPaused
     };
   }
-
-  return status;
-}
-
-function getActiveSchedulesForBreak() {
-  const currentTime = getCurrentTime();
-  const currentDay = getCurrentDay();
-  const today = getTodayDateString();
-  const activeSchedules = [];
-
-  for (let i = 0; i < schedules.length; i++) {
-    const schedule = schedules[i];
-    const isInDay = schedule.days.includes(currentDay);
-
-    let isInTime = false;
-    if (schedule.timeIntervals && schedule.timeIntervals.length > 0) {
-      for (const interval of schedule.timeIntervals) {
-        if (currentTime >= interval.startTime && currentTime < interval.endTime) {
-          isInTime = true;
-          break;
-        }
-      }
-    } else if (schedule.startTime && schedule.endTime) {
-      if (currentTime >= schedule.startTime && currentTime < schedule.endTime) {
-        isInTime = true;
-      }
-    }
-
-    if (isInDay && isInTime && (schedule.breakDuration || 0) > 0) {
-      const breakState = activeBreaks[i];
-      activeSchedules.push({
-        index: i,
-        name: schedule.name,
-        breakDuration: schedule.breakDuration,
-        hasActiveBreak: breakState && breakState.remainingSeconds > 0,
-        remainingSeconds: breakState ? breakState.remainingSeconds : 0,
-        isPaused: breakState ? breakState.isPaused : false,
-        usedToday: breakState && breakState.lastUsedDate === today && breakState.remainingSeconds <= 0,
-        canStartBreak: !breakState || breakState.lastUsedDate !== today || breakState.remainingSeconds > 0
-      });
-    }
-  }
-
-  return activeSchedules;
+  return { hasActiveBreak: false };
 }
 
 console.log('Background script loaded.');

@@ -1,3 +1,9 @@
+// Get the originally blocked URL from query params
+function getBlockedUrl() {
+    const params = new URLSearchParams(window.location.search);
+    return params.get('blockedUrl');
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     // Initialize break controls
     initBreakControls();
@@ -98,56 +104,48 @@ function updateBreakUI() {
     const breakSection = document.getElementById('breakSection');
     const breakContent = document.getElementById('breakContent');
     
-    chrome.runtime.sendMessage({ action: 'getActiveSchedulesForBreak' }, (response) => {
+    chrome.runtime.sendMessage({ action: 'getBreakStatus' }, (response) => {
         if (chrome.runtime.lastError) {
             console.error('Error getting break info:', chrome.runtime.lastError);
             return;
         }
         
-        const activeSchedules = response || [];
+        const status = response || {};
         
-        if (activeSchedules.length === 0) {
+        if (status.breakDuration <= 0) {
             breakSection.style.display = 'none';
             return;
         }
         
         breakSection.style.display = 'block';
-        let html = '';
+        let html = '<div class="break-schedule-item">';
         
-        for (const schedule of activeSchedules) {
-            html += `<div class="break-schedule-item" data-index="${schedule.index}">`;
-            html += `<span class="break-schedule-name">${schedule.name}</span>`;
+        if (status.hasActiveBreak) {
+            const stateClass = status.isPaused ? 'paused' : 'running';
+            const stateText = status.isPaused ? '◆ BREAK PAUSED ◆' : '◆ BREAK ACTIVE ◆';
             
-            if (schedule.hasActiveBreak) {
-                // Break is active - show timer and controls
-                const stateClass = schedule.isPaused ? 'paused' : 'running';
-                const stateText = schedule.isPaused ? '◆ BREAK PAUSED ◆' : '◆ BREAK ACTIVE ◆';
-                
-                html += `<div class="break-timer-display ${stateClass}">${formatTime(schedule.remainingSeconds)}</div>`;
-                html += `<span class="break-state-label ${stateClass}">${stateText}</span>`;
-                html += `<div class="break-buttons">`;
-                
-                if (schedule.isPaused) {
-                    html += `<button class="break-btn resume" data-action="resume" data-index="${schedule.index}">Resume Break</button>`;
-                } else {
-                    html += `<button class="break-btn pause" data-action="pause" data-index="${schedule.index}">Pause Break</button>`;
-                }
-                html += `</div>`;
-                
-            } else if (schedule.usedToday) {
-                // Break was already used today
-                html += `<div class="break-used-message">Break already used today for this schedule</div>`;
-                
-            } else if (schedule.canStartBreak) {
-                // Break available to start
-                html += `<div class="break-duration-info">You have a ${schedule.breakDuration} minute break available</div>`;
-                html += `<div class="break-buttons">`;
-                html += `<button class="break-btn start" data-action="start" data-index="${schedule.index}">Start Break</button>`;
-                html += `</div>`;
+            html += `<div class="break-timer-display ${stateClass}">${formatTime(status.remainingSeconds)}</div>`;
+            html += `<span class="break-state-label ${stateClass}">${stateText}</span>`;
+            html += `<div class="break-buttons">`;
+            
+            if (status.isPaused) {
+                html += `<button class="break-btn resume" data-action="resume">Resume Break</button>`;
+            } else {
+                html += `<button class="break-btn pause" data-action="pause">Pause Break</button>`;
             }
+            html += `</div>`;
             
+        } else if (status.usedToday) {
+            html += `<div class="break-used-message">Break already used today</div>`;
+            
+        } else if (status.canStartBreak) {
+            html += `<div class="break-duration-info">You have a ${status.breakDuration} minute break available</div>`;
+            html += `<div class="break-buttons">`;
+            html += `<button class="break-btn start" data-action="start">Start Break</button>`;
             html += `</div>`;
         }
+        
+        html += `</div>`;
         
         breakContent.innerHTML = html;
         attachBreakButtonListeners();
@@ -160,16 +158,20 @@ function attachBreakButtonListeners() {
     breakContent.querySelectorAll('button[data-action]').forEach(btn => {
         btn.addEventListener('click', () => {
             const action = btn.dataset.action;
-            const index = parseInt(btn.dataset.index);
             
             let messageAction = '';
             if (action === 'start') messageAction = 'startBreak';
             else if (action === 'pause') messageAction = 'pauseBreak';
             else if (action === 'resume') messageAction = 'resumeBreak';
             
-            chrome.runtime.sendMessage({ action: messageAction, scheduleIndex: index }, (response) => {
+            chrome.runtime.sendMessage({ action: messageAction }, (response) => {
                 if (response && response.success) {
-                    updateBreakUI();
+                    // If starting or resuming break, redirect to the originally blocked URL
+                    if ((action === 'start' || action === 'resume') && getBlockedUrl()) {
+                        window.location.href = getBlockedUrl();
+                    } else {
+                        updateBreakUI();
+                    }
                 } else {
                     console.error('Break action failed:', response?.error);
                 }

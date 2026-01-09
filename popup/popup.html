@@ -20,6 +20,12 @@
       <!-- Unified Blocking Tab -->
       <div id="blocking" class="tab-content active">
         
+        <!-- Active Break Controls - at top -->
+        <div id="breakControlsContainer" class="break-controls-container" style="display: none;">
+          <h3>Break</h3>
+          <div id="breakControlsContent"></div>
+        </div>
+
         <!-- Always-On Section -->
         <section class="panel-section">
           <h2>Always-On Rules</h2>
@@ -39,13 +45,6 @@
         <section class="panel-section">
           <h2>Scheduled Rules</h2>
           <p>Time-based blocking for specific days and hours.</p>
-          
-          <!-- Active Break Controls -->
-          <div id="breakControlsContainer" class="break-controls-container" style="display: none;">
-            <h3>Active Break</h3>
-            <div id="breakControlsContent"></div>
-          </div>
-
           <div id="scheduleList" class="schedule-items-container"></div>
           <button id="addScheduleBtn" class="primary-action full-width">Create New Schedule</button>
 
@@ -80,12 +79,6 @@
               <button type="button" id="addIntervalBtn" class="secondary-action">Add Time Interval</button>
             </div>
 
-            <label for="breakDuration">Break Duration (minutes):</label>
-            <div class="input-group">
-              <input type="number" id="breakDuration" min="0" max="120" value="0" placeholder="0 = no break">
-              <span class="input-hint">0 = no break allowed</span>
-            </div>
-
             <label for="scheduleRedirectUrl">Redirect to (optional):</label>
             <input type="text" id="scheduleRedirectUrl" placeholder="Default: pages/blocked.html">
             
@@ -111,12 +104,20 @@
       <!-- Settings/Global Redirect Tab -->
       <div id="settings" class="tab-content">
         <h2>Global Settings</h2>
-        <p>This redirect URL is used if a blocked site doesn't have a schedule-specific redirect.</p>
+        
+        <label for="globalBreakDurationInput">Daily Break Duration (minutes):</label>
+        <div class="input-group">
+          <input type="number" id="globalBreakDurationInput" min="0" max="120" value="30" placeholder="e.g., 30">
+          <button id="setBreakDurationBtn" class="primary-action">Save</button>
+        </div>
+        <p class="setting-hint">One break allowed per day. Set to 0 to disable breaks.</p>
+        
         <label for="globalRedirectUrlInput">Global Redirect URL:</label>
         <div class="input-group">
           <input type="text" id="globalRedirectUrlInput" placeholder="e.g., pages/blocked.html">
-          <button id="setGlobalRedirectBtn" class="primary-action">Set Global Redirect</button>
+          <button id="setGlobalRedirectBtn" class="primary-action">Save</button>
         </div>
+        <p class="setting-hint">Used when a blocked site doesn't have a schedule-specific redirect.</p>
       </div>
     </main>
   </div>
